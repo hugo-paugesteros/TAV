@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<section title="Comparaison">
+
+	<pre class="language-matlab">
+		<code>
+			for id = 1:n_chansons
+				entrees = bdd(id)
+				for [m, k] in entrees
+					for [m', k'] in requete
+						if (k' == k)
+							resultats[id][m' - m]++
+						end
+					end
+				end
+			end
+		</code>
+	</pre>
+
+	$$ C = n_\text{chansons} \times n_\text{pics par chanson} \times n_\text{pics par extrait} $$
+
+</section>

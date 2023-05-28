@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<section title="Comparaison">
+
+	<pre class="language-matlab">
+		<code>
+			for (m, k) = pics_requete
+				entrees = bdd(k)
+				for [~, m', id] in entrees
+					resultat[id][m' - m]
+				end
+			end
+		</code>
+	</pre>
+
+	$$ C = n_\text{pics par extrait} \times \frac{n_\text{chansons} \times n_\text{pics par chanson}}{256} $$
+
+</section>

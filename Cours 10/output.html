@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/theme/black.css">
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.min.js"></script><link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<div class="reveal"><div class="slides">
+<section><h1>Représentations</h1></section>
+	
+	<section><h2>Représentation temporelle : onde sonore</h2></section>
+
+	<section><h3>Propagation</h3>
+
+	<script src="components/wave_propagation.js"></script>
+	<wave-propagation></wave-propagation>
+
+</section>
+	<section><h3>Caractéristiques</h3>
+
+	<script type="module" src="componentsv2/wave_visualizer.js"></script>
+
+	<section><h4></h4>
+		<wave-visualizer></wave-visualizer>
+
+		<input type="range" name="freq" id="freq" min="200" value="440" max="800">
+		<input type="range" name="gain" id="gain" min="0" value="1" max="1" step="0.1">
+		<select name="" id="type">
+			<option value="sine">Sine</option>
+			<option value="square">Square</option>
+			<option value="complex">Complex</option>
+		</select>
+
+		<script>
+			let plot = undefined
+			let gainRange = document.querySelector('#gain')
+			let freqRange = document.querySelector('#freq')
+			let typeSelect = document.querySelector('#type')
+			
+			function update() {
+				let sr = 44100
+				let gain = gainRange.value
+				let freq = freqRange.value
+				let type = typeSelect.value
+
+				let t = Array(5 * sr).fill().map((_, i) => i / sr)
+				let y
+				switch (type) {
+					case 'square':
+						y = t.map(t => {
+							if(t % (1/freq) > 1/(2*freq)) {
+								return gain
+							} else {
+								return -gain
+							}
+						})
+						break;
+					case 'complex':
+						y = t.map(t => 
+							gain * Math.sin(2 * Math.PI * freq * t)
+							+ gain/2 * Math.sin(2 * Math.PI * 2 * freq * t)
+							+ gain/3 * Math.sin(2 * Math.PI * 3 * freq * t)
+							+ gain/4 * Math.sin(2 * Math.PI * 4 * freq * t)
+						)
+						break;
+					default:
+						y = t.map(t => gain * Math.sin(2 * Math.PI * freq * t))
+						break;
+				}
+				let slice = Math.round(0.01 * sr)
+				
+				let wave_visualizer = document.querySelector('wave-visualizer')
+				wave_visualizer.load(y, sr)
+				if (plot) {
+					plot.y = y
+					plot.render()
+				} else {
+					plot = wave_visualizer.plot(t.slice(0, slice), y.slice(0, slice))
+				}
+			}
+			
+			gainRange.addEventListener('change', update)
+			freqRange.addEventListener('change', update)
+			typeSelect.addEventListener('change', update)
+			window.customElements.whenDefined('wave-visualizer').then(() => {
+				update()
+			})
+		</script>
+	</section>
+
+	<section><h4>Intensité : amplitude</h4>
+		<p>Généralement, valeurs dans $[-1;1]$</p>
+	</section>
+
+	<section><h4>Hauteur : fréquence</h4>
+		<p>Oreille humaine : $[20Hz;20kHz]$</p>
+	</section>
+
+	<section><h4>Timbre : forme d'onde</h4>
+		<p>Permet de différencier les voix, les instruments de musique...</p>
+	</section>
+
+</section>
+	<section><h3>Du continu au discret</h3>
+
+	<section><h4>Quantification</h4>
+		<wave-visualizer id="quantization"></wave-visualizer>
+		<input type="range" name="quantization" id="quantization" min="1" value="8" max="12">
+
+		<script type="module">
+			import {quantize} from './componentsv2/utils.js'
+
+			var plot = undefined
+			let quantizationRange = document.querySelector('input#quantization')
+			
+			function update() {
+				let sr = 44100
+				let quantization = quantizationRange.value
+
+				let t = Array(5 * sr).fill().map((_, i) => i / sr)
+				let y = t.map(t =>  Math.sin(2 * Math.PI * 440 * t))
+				y = quantize(y, quantization)
+				
+				let slice = Math.round(0.01 * sr)
+				let wave_visualizer = document.querySelector('wave-visualizer#quantization')
+				wave_visualizer.load(y, sr)
+				if (plot) {
+					plot.y = y
+					plot.render()
+				} else {
+					plot = wave_visualizer.plot(t.slice(0, slice), y.slice(0, slice))
+				}
+			}
+			
+			quantizationRange.addEventListener('change', update)
+			window.customElements.whenDefined('wave-visualizer').then(() => {
+				update()
+			})
+		</script>
+	</section>
+
+	<section><h4>Échantillonage</h4>
+		<script src="https://cdn.jsdelivr.net/npm/@alexanderolsen/libsamplerate-js"></script>
+
+		<wave-visualizer id="sampling"></wave-visualizer>
+		<input type="range" name="sampling" id="sampling" min="440" step="50" value="1000" max="2000">
+		<p>Théorème de Nyquist-Shannon : $Fe \geq 2 \cdot f_{max}$</p>
+
+		<script type="module">
+			var plot = undefined
+			var plotTrue = undefined
+			var plotFalse = undefined
+			let samplingRange = document.querySelector('input#sampling')
+			let wave_visualizer
+			
+			function update() {
+				let sr = samplingRange.value
+				let f = 440
+
+				let t = Array(5 * sr).fill().map((_, i) => i / sr)
+				let y_true = t.map(t =>  Math.cos(2 * Math.PI * f * t))
+				let slice = Math.round(0.01 * sr)
+				if (plot) { plot.erase() }
+				plot = wave_visualizer.plot(t.slice(0, slice), y_true.slice(0, slice), 'scatter')
+
+				let srr = 44100
+				t = Array(5 * srr).fill().map((_, i) => i / srr)
+				let y = t.map(t => Math.cos(Math.PI * 2 * Math.min((sr - f), f) * t))
+				slice = Math.round(0.01 * srr)
+				if (plotFalse) { plotFalse.erase() }
+				plotFalse = wave_visualizer.plot(t.slice(0, slice), y.slice(0, slice))
+				plotFalse.strokeWidth = 0.005
+				plotFalse.color = 'red'
+
+				y = t.map(t =>  Math.cos(2 * Math.PI * f * t))
+				slice = Math.round(0.01 * srr)
+				if (plotTrue) { plotTrue.erase() }
+				plotTrue = wave_visualizer.plot(t.slice(0, slice), y.slice(0, slice))
+				plotTrue.strokeWidth = 0.005
+
+				if(sr < 2 * f) {
+					LibSampleRate.create(1, sr, 44100, {
+						converterType: 1,
+					}).then((src) => {
+						let y_resampled = src.full(y_true)
+						src.destroy()
+						wave_visualizer.load(y_resampled, 44100)
+					})
+				} else {
+					wave_visualizer.load(y, 44100)
+				}
+
+			}
+			
+			samplingRange.addEventListener('change', update)
+			window.customElements.whenDefined('wave-visualizer').then(() => {
+				wave_visualizer = document.querySelector('wave-visualizer#sampling')
+				update()
+			})
+		</script>
+	</section>
+
+</section>
+
+
+	<section><h2>Représentation fréquentielle : transformée de Fourier</h2></section>
+
+	<section><h3>Décomposition</h3>
+
+	<style>
+		span.response {
+			color: rgb(68, 205, 50);
+		}
+	</style>
+
+	<ul>
+		<li class="fragment" data-fragment-index="1">
+			Existence de fonctions permettant une décomposition fréquentielle ? 
+			<span class="fragment response" data-fragment-index="6">Oui, voir l'algorithme</span>
+		</li>
+		<li class="fragment" data-fragment-index="2">
+			Lesquelles choisir ?
+			<span class="fragment response" data-fragment-index="4">Sinusoïdes</span>
+		</li>
+		<li class="fragment" data-fragment-index="3">
+			Algorithme ?
+			<span class="fragment response" data-fragment-index="5">Oui !</span>
+		</li>
+	</ul>
+
+</section>
+	<section><h3>Intuitions</h3>
+
+	<section><h4>Enroule</h4>
+		<script type="module" src="componentsv2/fourier_warp.js"></script>
+		<fourier-warp></fourier-warp>
+		<input name="warp" id="kRange" type="range" min="0" step="0.1" max="100">
+
+		<script type="module">
+			let fourier_warp
+			let kRange = document.querySelector('#kRange')
+
+			window.customElements.whenDefined('fourier-warp').then(() => {
+				fourier_warp = document.querySelector('fourier-warp')
+				update()
+			})
+
+			
+			kRange.addEventListener('change', update)
+			function update() {
+				fourier_warp.render(kRange.value)
+			}
+		</script>
+	</section>
+	
+	<section><h4>Produit scalaire</h4>
+		<script type="module" src="componentsv2/windowing.js"></script>
+		<inner-product id="inner-product"></inner-product>
+		<input type="range" name="" id="kRange" min="0" max="8" step="1">
+		<script>
+			window.customElements.whenDefined('inner-product').then(() => {
+				let kRange = document.querySelector('#inner-product + #kRange')
+				let inner_prodcut = document.querySelector('#inner-product')
+				inner_prodcut.func = (t) => Math.cos(2 * Math.PI * 4 * t)
+				inner_prodcut.func = (t) => Math.sin(2 * Math.PI * 4 * t)
+				inner_prodcut.func = (t) => Math.sin(2 * Math.PI * 4 * t + Math.PI/4)
+				inner_prodcut.k = kRange.value
+				inner_prodcut.update()
+
+				kRange.addEventListener('change', () => {
+					inner_prodcut.k = kRange.value
+					inner_prodcut.update()
+				})
+			})
+		</script>
+	</section>
+
+</section>
+	<section><h3>DFT</h3>
+
+	<section><h4>Définition</h4>
+		$$ X(k) \coloneqq \langle x, f_k \rangle = \sum_{n = 0}^{N - 1} x(n) \exp(-2 \pi i n k / N), \qquad k = 0, 1, \dots, N - 1 $$
+
+		<p>Quelques propriétés :</p>
+		<ul>
+			<li class="fragment">$n \mapsto \exp(-2 \pi i n k / N)$ correspond à une sinusoïde complexe de fréquence $\frac{k \cdot f_{ech}}{N}$</li>
+			<li class="fragment">La DFT d'un signal de taille $N$ est $N$-périodique</li>
+			<li class="fragment">Si $x \in \R^N$, alors $X(k) = \bar{X}(N - k)$ pour $k \in 1, \dots, N-1$</li>
+		</ul>
+	</section>
+
+	<section><h4>Inverse DFT</h4>
+		$$ x(n) 
+		\coloneqq \sum_{k=0}^{N-1} \langle x, f_k \rangle \frac{f_k}{\|f_k\|}   
+		 = \frac{1}{N} \sum_{k=0}^{N-1} X(k) \exp(2 \pi i k n / N), \qquad n = 0, 1, \dots, N - 1 $$
+	</section>
+
+	<section><h4>FFT</h4>
+		<p>Algorithme rapide de calcul de la DFT (directe ou inverse) dans le cas d'un signal de taille $2^n$</p>
+	</section>
+
+</section>
+	<section><h3>Fenêtrage</h3>
+
+	<section><h4>Problème</h4>
+		<script type="module" src="componentsv2/windowing.js"></script>
+		<inner-product id="windowing"></inner-product>
+		<input type="range" name="" id="kRange" min="0" max="8" step="1">
+		<script>
+			window.customElements.whenDefined('inner-product').then(() => {
+				let kRange = document.querySelector('#windowing + #kRange')
+				let inner_prodcut = document.querySelector('#windowing')
+				inner_prodcut.func = (t) => Math.cos(2 * Math.PI * 4 * t)
+				inner_prodcut.func = (t) => Math.cos(2 * Math.PI * 4.5 * t)
+				inner_prodcut.k = kRange.value
+				inner_prodcut.update()
+
+				kRange.addEventListener('change', () => {
+					inner_prodcut.k = kRange.value
+					inner_prodcut.update()
+				})
+			})
+		</script>
+	</section>
+
+	<section><h4>Solution</h4>
+		<script type="module" src="componentsv2/dft.js"></script>
+		<dft-demo></dft-demo>
+		<input type="checkbox" name="" id="window">
+		<script>
+			window.customElements.whenDefined('dft-demo').then(() => {
+				let dft = document.querySelector('dft-demo')
+				let windowCheckbox = document.querySelector('#window')
+
+				// dft.func = (t) => Math.sin(2 * Math.PI * 4 * t)
+				dft.func = (t) => Math.sin(2 * Math.PI * 4.5 * t)
+				dft.update()
+
+				windowCheckbox.addEventListener('change', (e) => {
+					dft.window = e.target.checked
+					dft.update()
+				})
+			})
+		</script>
+	</section>
+
+</section>
+
+
+	<section><h2>Représentation fréquentio-temporelle : Transformée de Fourier à Court Terme</h2></section>
+
+	<section><h3>Motivation</h3>
+
+	<wave-visualizer id="stft_motivation"></wave-visualizer>
+	<script type="module">
+		window.customElements.whenDefined('wave-visualizer').then(() => {
+			let wave_visualizer = document.querySelector('#stft_motivation')
+			
+			let sr = 44100
+			let t = Array(0.01 * sr).fill().map((_, i) => i / sr)
+			let y = t.map((t) => {
+				let f = 4/0.005
+				if(t > 0.005) {
+					f = 8/0.005
+				}
+				return Math.cos(2 * Math.PI * f * t)
+			})
+			wave_visualizer.plot(t, y)
+		})
+		</script>
+
+
+</section>
+	<section><h3>Transformée de Fourier à Court Terme</h3>
+
+	<section><h4></h4>
+		<figure>
+			<img src="generated/stft.png" alt="" style="width: 500px;">
+		</figure>
+	</section>
+
+	<section><h4>Définition</h4>
+		
+		$$ 
+		\begin{aligned}
+			\mathcal{X}(m, k) = \sum_{n = 0}^{N-1} x(n + mH)w(n)\exp(-2 \pi i k n / N) 
+			\qquad 	k &amp;= 0, 1, \dots, N - 1 \\
+					m &amp;= 0, 1, \dots, \lfloor \frac{L-N}{H} \rfloor
+		\end{aligned}
+		$$
+		
+
+		<ul>
+			<li class="fragment">$T(m) \coloneqq \frac{m \cdot H}{f_{ech}}$</li>
+			<li class="fragment">$F(k) \coloneqq \frac{k \cdot f_{ech}}{N}$</li>
+		</ul>
+	</section>
+
+	<section><h4>Inverse</h4>
+		$$ x(n) = \frac{
+			\sum_{m \in \Z} x_m(n-nH)
+		}{
+			\sum_{m \in \Z} w(n-mH)
+		} $$
+	</section>
+
+</section>
+	<section><h3>Spectrogramme</h3>
+
+	<section><h4></h4>
+		<figure>
+			<img src="generated/spectrograms/spectrogram_linear.png" alt="">
+			<figcaption>$$ S(k, m) \coloneqq |Y(k, m)|^2 $$</figcaption>
+		</figure>
+	</section>
+
+	<section><h4></h4>
+		<figure>
+			<img src="generated/spectrograms/spectrogram_log.png" alt="">
+			<figcaption>$$ S_{dB}(k, m) \coloneqq 10 \cdot \log10 \left( S(k, m) \right) = 20 \cdot \log10 \left( |Y(k, m)| \right) $$</figcaption>
+			<audio src="generated/spectrograms/the_lamp.wav" controls=""></audio>
+		</figure>
+	</section>
+
+</section>
+
+
+	<section><h2>Effets audio</h2></section>
+
+	<section><h3>Filtres</h3>
+
+	<section><h4>Passe-bas</h4>
+		<figure>
+			<img src="generated/effects/lp.png" alt="">
+			<figcaption>Coupure des fréquences au delà de $1000Hz$</figcaption>
+			<audio src="generated/effects/y_lp_ex.wav" controls=""></audio>
+			<audio src="generated/effects/y_lp_res.wav" controls=""></audio>
+		</figure>
+	</section>
+
+	<section><h4>Passe-haut</h4>
+		<figure>
+			<img src="generated/effects/hp.png" alt="">
+			<figcaption>Coupure des fréquences en dessous de $1000Hz$</figcaption>
+			<audio src="generated/effects/y_hp_ex.wav" controls=""></audio>
+			<audio src="generated/effects/y_hp_res.wav" controls=""></audio>
+		</figure>
+	</section>
+
+	<section><h4>Compression</h4>
+		<figure>
+			<img src="generated/effects/comp.png" alt="">
+			<figcaption>Décimation des plus faibles coefficients de Fourier</figcaption>
+			<audio src="generated/effects/y_comp_ex.wav" controls=""></audio>
+			<audio src="generated/effects/y_comp_res.wav" controls=""></audio>
+		</figure>
+	</section>
+
+</section>
+	<section><h3>Étirement temporel</h3>
+
+	<section><h4>Vitesse de lecture</h4>
+
+		<figure>
+			<img src="generated/time_stretch/playback.png" alt="">
+			<figcaption>Lecture d'un signal $1.5 \times$ plus rapidement</figcaption>
+			<audio src="generated/time_stretch/y_playback_ex.wav" controls=""></audio>
+			<audio src="generated/time_stretch/y_playback_res.wav" controls=""></audio>
+		</figure>
+
+		<ul>
+			<li class="fragment">En pratique : faire comme si le signal avait été échantilloné à $1.5 \cdot F_{ech}$</li>
+		</ul>
+
+	</section>
+
+	<section><h4>Étirement temporel</h4>
+
+		<figure>
+			<img src="generated/time_stretch/time_stretch.png" alt="">
+			<figcaption>Génération d'un signal $1.5 \times$ plus long</figcaption>
+			<audio src="generated/time_stretch/y_time_stretch_ex.wav" controls=""></audio>
+			<audio src="generated/time_stretch/y_time_stretch_res.wav" controls=""></audio>
+		</figure>
+
+		<ul>
+			<li>En pratique : créer un sonagramme étiré, puis ajuster les phases</li>
+		</ul>
+
+	</section>
+
+	<section><h4>Transposition</h4>
+
+		<figure>
+			<img src="generated/time_stretch/pitch_shift.png" alt="">
+			<figcaption>Génération d'un signal $1.5 \times$ plus aigu</figcaption>
+			<audio src="generated/time_stretch/y_pitch_shift_ex.wav" controls=""></audio>
+			<audio src="generated/time_stretch/y_pitch_shift_res.wav" controls=""></audio>
+		</figure>
+
+		<ul>
+			<li class="fragment">Étirer d'un facteur $1.5$ le signal</li>
+			<li class="fragment">Le lire $1.5 \times$ plus vite</li>
+		</ul>
+
+	</section>
+
+</section>
+
+
+
+</div></div>
+<script>
+                    renderMathInElement(document.body, {
+                        delimiters: [
+                            {left: "$$", right: "$$", display: true},
+                            {left: "$", right: "$", display: false}
+                        ]
+                    });
+            </script><script>
+				Reveal.initialize({
+					hash: true,
+				})
+			</script>
+</body>
+</html>

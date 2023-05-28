@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<section title="Filtres">
+
+	<section title="Passe-bas">
+		<figure>
+			<img src="generated/effects/lp.png" alt="" />
+			<figcaption>Coupure des fréquences au delà de $1000Hz$</figcaption>
+			<audio src="generated/effects/y_lp_ex.wav" controls=""></audio>
+			<audio src="generated/effects/y_lp_res.wav" controls=""></audio>
+		</figure>
+	</section>
+
+	<section title="Passe-haut">
+		<figure>
+			<img src="generated/effects/hp.png" alt="" />
+			<figcaption>Coupure des fréquences en dessous de $1000Hz$</figcaption>
+			<audio src="generated/effects/y_hp_ex.wav" controls=""></audio>
+			<audio src="generated/effects/y_hp_res.wav" controls=""></audio>
+		</figure>
+	</section>
+
+	<section title="Compression">
+		<figure>
+			<img src="generated/effects/comp.png" alt="" />
+			<figcaption>Décimation des plus faibles coefficients de Fourier</figcaption>
+			<audio src="generated/effects/y_comp_ex.wav" controls=""></audio>
+			<audio src="generated/effects/y_comp_res.wav" controls=""></audio>
+		</figure>
+	</section>
+
+</section>

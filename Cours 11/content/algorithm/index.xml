@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<section title="Algorithme">
+
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="version1/index.xml"/>
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="version1bis/index.xml"/>
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="version2/index.xml"/>
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="version3/index.xml"/>
+
+</section>

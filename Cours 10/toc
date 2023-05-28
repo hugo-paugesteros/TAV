@@ -1,0 +1,25 @@
+Representations
+	- Time
+		- Waveform
+		- Characteristics
+		- Continuous to discrete : 
+			- Quantization
+			- Sampling
+
+	- Frequency
+		- Decomposition
+		- Intuition
+		- DFT, iDFT, FFT
+			- Leakage
+			- Windowing
+		
+	- Time-Frequency
+		- Motivation
+		- STFT, iSTFT
+		- Spectrogram
+
+	- Basic audio effects
+		- LP, HP, Compression
+		- Time stretch
+		- Pitch shift
+	

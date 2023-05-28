@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<section title="Représentation fréquentio-temporelle : Transformée de Fourier à Court Terme">
+
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="motivation.xml"/>
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="stft.xml"/>
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="spectrogram.xml"/>
+
+</section>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<section title="Création des empreintes">
+
+	<figure>
+		<img src="figures/pics_spectraux.png" alt="" />
+	</figure>
+
+	<![CDATA[
+	$$
+	(m_0, k_0) \quad / \quad
+	\begin{cases}
+	\forall m \in [m_0 - \eta_t, m_0 + \eta_t] \\
+	\forall k \in [k_0 - \eta_f, k_0 + \eta_f]
+	\end{cases}
+	\quad
+	S_{dB}(m_0, k_0) \ge \max(S_{dB}(m, k), \epsilon)
+	$$
+	]]>
+
+</section>

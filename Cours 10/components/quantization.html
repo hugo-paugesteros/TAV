@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+
+	<style>
+		@media (prefers-color-scheme: dark) {
+			body {
+				background-color: black;
+			}
+		}
+	</style>
+	
+	<script src="wave_main.js"></script>
+	<script src="wave_input.js" type="module"></script>
+	<script src="wave_generator.js" type="module"></script>
+	<script src="wave_visualizer.js" type="module"></script>
+	<script src="wave_samplerate.js" type="module"></script>
+	<wave-main>
+		<wave-input></wave-input>
+		<wave-generator></wave-generator>
+		<wave-quantizer></wave-quantizer>
+		<wave-samplerate></wave-samplerate>
+		<wave-visualizer slot='visualizer'></wave-visualizer>
+	</wave-main>
+
+</body>
+</html>

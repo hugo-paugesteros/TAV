@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<section title="Décomposition">
+
+	<style>
+		span.response {
+			color: rgb(68, 205, 50);
+		}
+	</style>
+
+	<ul>
+		<li class="fragment" data-fragment-index="1">
+			Existence de fonctions permettant une décomposition fréquentielle ? 
+			<span class="fragment response" data-fragment-index="6">Oui, voir l'algorithme</span>
+		</li>
+		<li class="fragment" data-fragment-index="2">
+			Lesquelles choisir ?
+			<span class="fragment response" data-fragment-index="4">Sinusoïdes</span>
+		</li>
+		<li class="fragment" data-fragment-index="3">
+			Algorithme ?
+			<span class="fragment response" data-fragment-index="5">Oui !</span>
+		</li>
+	</ul>
+
+</section>

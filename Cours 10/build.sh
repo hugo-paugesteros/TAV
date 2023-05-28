@@ -1,0 +1,1 @@
+xsltproc --xinclude output.xsl content/representations/index.xml > output.html 

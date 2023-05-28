@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<section title="Similarité ?">
+
+	<table>
+		<tr>
+			<th class="fragment">Eschenbach</th>
+			<td><audio src="audio/samples/Eschenbach.wav" controls=""></audio></td>
+		</tr>
+		<tr>
+			<th class="fragment">Furtwangler</th>
+			<td><audio src="audio/samples/Furtwangler.wav" controls=""></audio></td>
+		</tr>
+		<tr>
+			<th class="fragment">Karajan</th>
+			<td><audio src="audio/samples/Karajan.wav" controls=""></audio></td>
+		</tr>
+		<tr>
+			<th class="fragment">Listz</th>
+			<td><audio src="audio/samples/Listz.wav" controls=""></audio></td>
+		</tr>
+		<tr>
+			<th class="fragment">Stupeflip</th>
+			<td><audio src="audio/samples/Stupeflip.wav" controls=""></audio></td>
+		</tr>
+	</table>
+
+</section>

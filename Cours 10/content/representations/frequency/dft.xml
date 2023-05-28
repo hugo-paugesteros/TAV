@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<section title="DFT">
+
+	<section title="Définition">
+		$$ X(k) \coloneqq \langle x, f_k \rangle = \sum_{n = 0}^{N - 1} x(n) \exp(-2 \pi i n k / N), \qquad k = 0, 1, \dots, N - 1 $$
+
+		<p>Quelques propriétés :</p>
+		<ul>
+			<li class="fragment">$n \mapsto \exp(-2 \pi i n k / N)$ correspond à une sinusoïde complexe de fréquence $\frac{k \cdot f_{ech}}{N}$</li>
+			<li class="fragment">La DFT d'un signal de taille $N$ est $N$-périodique</li>
+			<li class="fragment">Si $x \in \R^N$, alors $X(k) = \bar{X}(N - k)$ pour $k \in 1, \dots, N-1$</li>
+		</ul>
+	</section>
+
+	<section title="Inverse DFT">
+		$$ x(n) 
+		\coloneqq \sum_{k=0}^{N-1} \langle x, f_k \rangle \frac{f_k}{\|f_k\|}   
+		 = \frac{1}{N} \sum_{k=0}^{N-1} X(k) \exp(2 \pi i k n / N), \qquad n = 0, 1, \dots, N - 1 $$
+	</section>
+
+	<section title="FFT">
+		<p>Algorithme rapide de calcul de la DFT (directe ou inverse) dans le cas d'un signal de taille $2^n$</p>
+	</section>
+
+</section>

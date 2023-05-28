@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<section title="Transformations">
+
+	<section>
+		<table>
+			<tr>
+				<th>Original</th>
+				<td><audio src="audio/transforms/original.wav" controls=""></audio></td>
+			</tr>
+			<tr>
+				<th>Bruit parole</th>
+				<td><audio src="audio/transforms/bruit_parole.wav" controls=""></audio></td>
+			</tr>
+			<tr>
+				<th>Bruit</th>
+				<td><audio src="audio/transforms/bruit.wav" controls=""></audio></td>
+			</tr>
+			<tr>
+				<th>Compression</th>
+				<td><audio src="audio/transforms/compression.wav" controls=""></audio></td>
+			</tr>
+			<tr>
+				<th>Étirement temporel</th>
+				<td><audio src="audio/transforms/etirement_temporel.wav" controls=""></audio></td>
+			</tr>
+			<tr>
+				<th>Transposition</th>
+				<td><audio src="audio/transforms/transposition.wav" controls=""></audio></td>
+			</tr>
+		</table>
+	</section>
+
+	<section>
+		<figure>
+			<img src="figures/transformations/transformations.png" alt="" />
+			<figcaption></figcaption>
+		</figure>
+	</section>
+
+</section>

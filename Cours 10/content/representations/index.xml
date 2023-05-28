@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<section title="Représentations">
+	
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="time/index.xml"/>
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="frequency/index.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="time-frequency/index.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="effects/index.xml" />
+
+</section>

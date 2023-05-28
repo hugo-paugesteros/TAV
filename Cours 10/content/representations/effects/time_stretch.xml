@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<section title="Étirement temporel">
+
+	<section title="Vitesse de lecture">
+
+		<figure>
+			<img src="generated/time_stretch/playback.png" alt="" />
+			<figcaption>Lecture d'un signal $1.5 \times$ plus rapidement</figcaption>
+			<audio src="generated/time_stretch/y_playback_ex.wav" controls=""></audio>
+			<audio src="generated/time_stretch/y_playback_res.wav" controls=""></audio>
+		</figure>
+
+		<ul>
+			<li class="fragment">En pratique : faire comme si le signal avait été échantilloné à $1.5 \cdot F_{ech}$</li>
+		</ul>
+
+	</section>
+
+	<section title="Étirement temporel">
+
+		<figure>
+			<img src="generated/time_stretch/time_stretch.png" alt="" />
+			<figcaption>Génération d'un signal $1.5 \times$ plus long</figcaption>
+			<audio src="generated/time_stretch/y_time_stretch_ex.wav" controls=""></audio>
+			<audio src="generated/time_stretch/y_time_stretch_res.wav" controls=""></audio>
+		</figure>
+
+		<ul>
+			<li>En pratique : créer un sonagramme étiré, puis ajuster les phases</li>
+		</ul>
+
+	</section>
+
+	<section title="Transposition">
+
+		<figure>
+			<img src="generated/time_stretch/pitch_shift.png" alt="" />
+			<figcaption>Génération d'un signal $1.5 \times$ plus aigu</figcaption>
+			<audio src="generated/time_stretch/y_pitch_shift_ex.wav" controls=""></audio>
+			<audio src="generated/time_stretch/y_pitch_shift_res.wav" controls=""></audio>
+		</figure>
+
+		<ul>
+			<li class="fragment">Étirer d'un facteur $1.5$ le signal</li>
+			<li class="fragment">Le lire $1.5 \times$ plus vite</li>
+		</ul>
+
+	</section>
+
+</section>

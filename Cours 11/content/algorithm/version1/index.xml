@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<section title="Version 1">
+
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="creation.xml"/>
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="storage.xml"/>
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="comparison.xml"/>
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="complexity.xml"/>
+
+</section>

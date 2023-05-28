@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<section title="Compléxité">
+
+	<pre class="language-matlab">
+		<code>
+			for id = 1:n_chansons
+				entrees = bdd(id)
+				for decalage = 1:n_decalages
+					for [m, k] in entrees
+						for [m', k'] in requete
+							if (m' + decalage == m) and (k' == k)
+								resultats[id][decalage]++
+							end
+						end
+					end
+				end
+			end
+		</code>
+	</pre>
+
+	$$ C = n_\text{chansons} \times n_\text{décalages} \times n_\text{pics par chanson} \times n_\text{pics par extrait} $$
+
+</section>
