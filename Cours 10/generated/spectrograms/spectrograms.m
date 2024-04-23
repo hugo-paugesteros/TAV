@@ -6,7 +6,7 @@ H = taille_ecran(4);
 
 % Lecture d'un fichier audio
 % [y, f_ech] = audioread('Audio/mpl.wav');
-[y, f_ech] = audioread('../audio/Laurindo Almeida - The Lamp Is Low [lkk6m14htzw].mp3', [122 140] * 48000);
+[y, f_ech] = audioread('../../audio/Laurindo Almeida - The Lamp Is Low [lkk6m14htzw].mp3', [122 140] * 48000);
 y = mean(y, 2);
 
 % Calcul de la transformée de Fourier à court terme :
@@ -15,8 +15,8 @@ n_decalage = 512;		% Décalage entre positions successives de la fenêtre (en no
 fenetre = 'hann';		% Type de la fenêtre : 'rect' ou 'hann'
 
 [Y, valeurs_t, valeurs_f] = TFCT(y, f_ech, n_fenetre, n_decalage, fenetre);
-S = abs(Y).^2;
-% S = 20 * log10(abs(Y) + eps);
+% S = abs(Y).^2;
+S = 20 * log10(abs(Y) + eps);
 
 % Affichage du module de la transformée de Fourier à court terme :
 figure(Name='Transformée de  Fourier à court terme', Position=[0.4*L,0,0.6*L,0.6*H]);
