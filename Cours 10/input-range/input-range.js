@@ -1,48 +1,49 @@
+const template = document.createElement('template')
+template.innerHTML = `
+    <span id="min"></span>
+    <div>
+        <input type="range">
+        <output id="value"></output>
+    </div>
+    <span id="max"></span>
+
+    <style>
+        :host {
+            display: flex;
+            align-items: center;
+        }
+
+        span {
+            margin: 0 1em;
+            // line-height: 40px;
+        }
+
+        div {
+            position: relative;
+            input {
+                margin: 0;
+                display: block
+            }
+        }
+
+        output {
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    </style>
+`
+
 class InputRange extends HTMLElement {
     
     THUMB_SIZE = 19.8333
 
     constructor() {
         super()
+    }
 
-
-        const template = document.createElement('template')
-        template.innerHTML = `
-            <span id="min"></span>
-            <div>
-                <input type="range">
-                <output id="value"></output>
-            </div>
-            <span id="max"></span>
-
-            <style>
-                :host {
-                    display: flex;
-                    align-items: center;
-
-                    span {
-                        margin: 0 1em;
-                        // line-height: 40px;
-                    }
-
-                    div {
-                        position: relative;
-                        input {
-                            margin: 0;
-                            display: block
-                        }
-                    }
-
-                    output {
-                        position: absolute;
-                        top: 25px;
-                        left: 50%;
-                        transform: translateX(-50%);
-                    }
-                }
-            </style>
-        `
-        
+    connectedCallback() {
         const shadow = this.attachShadow({ mode: "open" })
         shadow.appendChild(template.content.cloneNode(true))
 
@@ -52,9 +53,7 @@ class InputRange extends HTMLElement {
         this.rangeValue = shadow.querySelector('#value') 
 
         this.inputRange.addEventListener('input', () => this.update())
-    }
 
-    connectedCallback() {
         this.inputRange.setAttribute('min', this.getAttribute('min'))
         this.inputRange.setAttribute('max', this.getAttribute('max'))
         this.inputRange.setAttribute('value', this.getAttribute('value'))
