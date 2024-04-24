@@ -1,0 +1,19 @@
+sub-sampling  {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    figure {
+        display: flex;
+        gap: 1em;
+        svg {
+            width: 300px;
+        }
+    }
+
+    #controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}

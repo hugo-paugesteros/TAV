@@ -1,0 +1,12 @@
+wave-sampling {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    #controls {
+        margin: 1em 0em;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}

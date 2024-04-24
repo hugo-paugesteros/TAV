@@ -1,0 +1,16 @@
+section(title="Spectrogramme / Sonagramme")
+
+    section()
+        figure
+            img(src="generated/spectrograms/spectrogram_linear.png")
+            figcaption $$ S(k, m) \triangleq |Y(k, m)|^2 $$
+
+    section()
+        figure
+            img(src="generated/spectrograms/spectrogram_log.png")
+            figcaption.
+                $$ \begin{aligned}
+                S_{dB}(k, m)    &amp; \triangleq 10 \cdot \log10 \left( S(k, m) \right) \\
+                                &amp;= 20 \cdot \log10 \left( |Y(k, m)| \right) 
+                \end{aligned} $$
+            audio(src="generated/spectrograms/the_lamp.wav", controls)

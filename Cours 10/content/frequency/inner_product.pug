@@ -1,0 +1,125 @@
+section(title="Quelques observations sur le produit scalaire")
+
+    script(src="inner-product/inner-product.js")
+
+    section(title="Une sinusoïde")
+        inner-product#one-sine
+        input-range#freqRange(min=0, max=10, style="display: inline-flex")
+        script(type="module").
+            window.customElements.whenDefined('inner-product').then(() => {
+                let inner_product   = document.querySelector('inner-product#one-sine')
+                let freqRange       = document.querySelector('#one-sine + #freqRange')
+                
+                inner_product.f2 = inner_product.t.map((t, _) => Math.sin(2 * Math.PI * freqRange.value * t))
+                inner_product.update()
+
+                freqRange.addEventListener('input', () => {
+                    inner_product.f2 = inner_product.t.map((t, _) => Math.sin(2 * Math.PI * freqRange.value * t))
+                    inner_product.update()
+                })
+            })
+
+    section(title="Une somme de sinusoïdes")
+        inner-product#two-sines
+        input-range#freqRange(min=0, max=10, style="display: inline-flex")
+        script(type="module").
+            window.customElements.whenDefined('inner-product').then(() => {
+                let inner_product   = document.querySelector('inner-product#two-sines')
+                let freqRange       = document.querySelector('#two-sines + #freqRange')
+                
+                inner_product.f1 = inner_product.t.map((t, _) => 
+                    0.5 * Math.sin(2 * Math.PI * 4 * t) +
+                    0.5 * Math.sin(2 * Math.PI * 8 * t)
+                )
+                inner_product.f2 = inner_product.t.map((t, _) => Math.sin(2 * Math.PI * freqRange.value * t))
+                inner_product.update()
+
+                freqRange.addEventListener('input', () => {
+                    inner_product.f2 = inner_product.t.map((t, _) => Math.sin(2 * Math.PI * freqRange.value * t))
+                    inner_product.update()
+                })
+            })
+
+    section(title="Un problème de phase")
+        inner-product#phase
+        input-range#freqRange(min=0, max=10, style="display: inline-flex")
+        input-range#phaseRange(min=0, step=30, max=360, style="display: inline-flex")
+        script(type="module").
+            window.customElements.whenDefined('inner-product').then(() => {
+                let inner_product   = document.querySelector('inner-product#phase')
+                let freqRange       = document.querySelector('#phase + #freqRange')
+                let phaseRange       = document.querySelector('#phase ~ #phaseRange')
+                
+                inner_product.f1 = inner_product.t.map((t, _) => 
+                    Math.sin(2 * Math.PI * 4 * t + 2 * Math.PI * phaseRange.value / 360)
+                )
+                inner_product.f2 = inner_product.t.map((t, _) => Math.sin(2 * Math.PI * freqRange.value * t))
+                inner_product.update()
+
+                freqRange.addEventListener('input', () => {
+                    inner_product.f2 = inner_product.t.map((t, _) => Math.sin(2 * Math.PI * freqRange.value * t))
+                    inner_product.update()
+                })
+
+                phaseRange.addEventListener('input', () => {
+                    inner_product.f1 = inner_product.t.map((t, _) => 
+                        Math.sin(2 * Math.PI * 4 * t + 2 * Math.PI * phaseRange.value / 360)
+                    )
+                    inner_product.update()
+                })
+            })
+
+    section(title="Une solution")
+        div#complex
+            div(style="display: flex; gap:1em;")
+                inner-product(style="flex-grow:1;")
+                inner-product(style="flex-grow:1;")
+            svg#circle(style="width: 200px;")
+            br
+            input-range#freqRange(min=0, max=10, style="display: inline-flex")
+            input-range#phaseRange(min=0, step=30, max=360, style="display: inline-flex")
+
+
+        script(type="module").
+            window.customElements.whenDefined('inner-product').then(() => {
+                let inner_product_cos   = document.querySelector('#complex inner-product:nth-child(1)')
+                let inner_product_sin   = document.querySelector('#complex inner-product:nth-child(2)')
+                let circle_svg          = SVG('#complex #circle').viewbox(-1.05, -1.05, 2.1, 2.1)
+                let freqRange           = document.querySelector('#complex #freqRange')
+                let phaseRange          = document.querySelector('#complex #phaseRange')
+
+                circle_svg.circle(2).cx(0).cy(0).css({fill: 'none'})
+                let point = circle_svg.circle(.1).cx(0).cy(0)
+                let cos_line = circle_svg.line().plot(0,0,0,0).stroke('green')
+                let sin_line = circle_svg.line().plot(0,0,0,0).stroke('red')
+
+                inner_product_cos.progress.stroke('green')
+                inner_product_sin.progress.stroke('red')
+
+                freqRange.addEventListener('input', () => update())
+                phaseRange.addEventListener('input', () => update())
+
+                function update() {
+                    inner_product_cos.f1 = inner_product_cos.t.map((t, _) => 
+                        Math.sin(2 * Math.PI * 4 * t + 2 * Math.PI * phaseRange.value / 360)
+                    )
+                    inner_product_sin.f1 =  inner_product_cos.f1
+
+                    inner_product_cos.f2 = inner_product_cos.t.map((t, _) => Math.cos(2 * Math.PI * freqRange.value * t))
+
+                    inner_product_sin.f2 = inner_product_sin.t.map((t, _) => Math.sin(2 * Math.PI * freqRange.value * t))
+                    inner_product_cos.update()
+                    inner_product_sin.update()
+
+                    point.animate()
+                        .cx(inner_product_cos.product/100)
+                        .cy(-inner_product_sin.product/100)
+                    cos_line.animate().plot(0, 0, inner_product_cos.product/100, 0)
+                    sin_line.animate().plot(inner_product_cos.product/100, 0, inner_product_cos.product/100, -inner_product_sin.product/100)
+                }
+
+                update()
+            })
+
+    section(title="Reconstruction ?")
+        p Pour un signal de taille $n$, il suffit de le comparer avec $n$ paires de $\cos$ / $\sin$ pour pouvoir effectuer une reconstruction parfaite !

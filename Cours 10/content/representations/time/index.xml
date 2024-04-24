@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<section title="Représentation temporelle : onde sonore">
-
-	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="waveform.xml"/>
-	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="characteristics.xml"/>
-	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="discrete.xml"/>
-
-</section>

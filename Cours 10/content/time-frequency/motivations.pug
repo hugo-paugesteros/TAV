@@ -1,0 +1,65 @@
+section(title="Motivations")
+
+    section(title="Problème")
+
+        svg#twofreqs
+
+        script(type="module").
+            let sr = 44100
+            let svg = SVG('#twofreqs').viewbox(0, 0, 10, 2).viewrange(0, 1, -1.05, 1.05)
+            let t = new Array(1 * sr).fill().map((_, i) => i / sr)
+            let y = t.map((t, _) => (t &lt; 0.5) ? Math.cos(2 * Math.PI * 4/0.5 * t) : Math.cos(2 * Math.PI * 8/0.5 * t))
+            let path = svg.getPath(t, y)
+            svg.path().plot(path)
+
+        svg#twofreqsdft
+
+        script(type="module").
+            let sr = 44100
+            let svg = SVG('#twofreqsdft').viewbox(0, 0, 10, 2).viewrange(0, 1000, 0, 1.05)
+            let f = new Array(sr/2).fill().map((_, i) => i)
+            let y = f.map((t, _) => 0)
+            y[440] = 0.5
+            y[840] = 0.5
+            let path = svg.getPath(f, y)
+            svg.path().plot(path)
+
+    section(title="Solution")
+
+        svg#twofreqs2
+
+        script(type="module").
+            let sr = 44100
+            let svg = SVG('#twofreqs2').viewbox(0, 0, 10, 2).viewrange(0, 1, -1.1, 1.1)
+            let t = new Array(1 * sr).fill().map((_, i) => i / sr)
+            let y = t.map((t, _) => (t &lt; 0.5) ? Math.cos(2 * Math.PI * 4/0.5 * t) : Math.cos(2 * Math.PI * 8/0.5 * t))
+            let path = svg.getPath(t, y)
+            svg.path().plot(path)
+
+            let rect1 = svg.rect(10/2, 1.9).y(0.05).css({fill: 'none', stroke: 'rgba(255,0,0,.8)'}).addClass('fragment').attr({'data-fragment-index': 1})
+            let rect2 = svg.rect(10/2, 1.9).y(0.05).x(2.5).css({fill: 'none', stroke: 'rgba(0,255,0,.8)'}).addClass('fragment').attr({'data-fragment-index': 2})
+            let rect3 = svg.rect(10/2, 1.9).y(0.05).x(5).css({fill: 'none', stroke: 'rgba(0,0,255,.8)'}).addClass('fragment').attr({'data-fragment-index': 3})
+
+        figure(style='display:flex; gap:1em;')#twofreqs2dft
+            svg
+            svg
+            svg
+
+        script(type="module").
+            let sr = 44100
+            let svg1 = SVG('#twofreqs2dft svg:nth-child(1)').viewbox(0, 0, 3, 1).viewrange(0, 1320, 0, 1.05).addClass('fragment').attr({'data-fragment-index': 1})
+            let svg2 = SVG('#twofreqs2dft svg:nth-child(2)').viewbox(0, 0, 3, 1).viewrange(0, 1320, 0, 1.05).addClass('fragment').attr({'data-fragment-index': 2})
+            let svg3 = SVG('#twofreqs2dft svg:nth-child(3)').viewbox(0, 0, 3, 1).viewrange(0, 1320, 0, 1.05).addClass('fragment').attr({'data-fragment-index': 3})
+            let f = new Array(sr/2).fill().map((_, i) => i)
+            let y1 = f.map((t, _) => 0)
+            y1[440] = 1
+            svg1.path().plot(svg1.getPath(f, y1))
+
+            let y2 = f.map((t, _) => 0)
+            y2[440] = .5
+            y2[880] = .5
+            svg2.path().plot(svg2.getPath(f, y2))
+
+            let y3 = f.map((t, _) => 0)
+            y3[880] = 1
+            svg3.path().plot(svg3.getPath(f, y3))

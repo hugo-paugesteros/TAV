@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/3.2.0/svg.min.js" integrity="sha512-EmfT33UCuNEdtd9zuhgQClh7gidfPpkp93WO8GEfAP3cLD++UM1AG9jsTUitCI9DH5nF72XaFePME92r767dHA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="input-range/input-range.js"></script>
+</head>
+<body>
+    <link rel="stylesheet" href="style.css">
+
+    <script type="module" src="wave-generator/wave-generator.js"></script>
+    <!-- <wave-generator></wave-generator> -->
+
+    <script type="module" src="wave-quantization/wave-quantization.js"></script>
+    <!-- <wave-quantization></wave-quantization> -->
+
+    <script type="module" src="wave-sampling/wave-sampling.js"></script>
+    <!-- <wave-sampling></wave-sampling> -->
+
+    <script type="module" src="wave-nyquist/wave-nyquist.js"></script>
+    <!-- <wave-nyquist></wave-nyquist> -->
+
+    <script type="module" src="sub-sampling/sub-sampling.js"></script>
+    <!-- <sub-sampling></sub-sampling> -->
+
+    <script type="module" src="inner-product/inner-product.js"></script>
+    <!-- <inner-product></inner-product> -->
+    <!-- <div>
+        <inner-product></inner-product>
+        <inner-product></inner-product>
+    </div>
+    <script>
+        window.customElements.whenDefined('inner-product').then(() => {
+            let inner_product = document.querySelector('inner-product')
+            inner_product.f1 = inner_product.t.map((t, _) => 
+                0.5 * Math.sin(2 * Math.PI * 4 * t) +
+                0.5 * Math.sin(2 * Math.PI * 8 * t)
+            )
+            inner_product.f2 = inner_product.t.map((t, _) => Math.sin(2 * Math.PI * -4 * t))
+            inner_product.update()
+        })
+    </script> -->
+
+    <!-- <input-range min="1" max="4" value="1" step="0.5"></input-range> -->
+</body>
+</html>

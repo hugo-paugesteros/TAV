@@ -1,0 +1,19 @@
+inner-product {
+    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+
+    #f1f2 {
+        path {
+            fill: rgba(255, 255, 255, .3)
+        }
+    }
+}
+
+meter::-webkit-meter-suboptimum-value{
+    background:red;
+}
+meter {
+    transition: all .2s;
+}

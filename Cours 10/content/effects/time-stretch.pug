@@ -1,0 +1,44 @@
+section(title="Étirement temporel")
+
+    section(title="Vitesse de lecture")
+        figure
+            img(src="generated/time_stretch/playback.png")
+            figcaption Lecture d'un signal $1.5 \times$ plus rapidement
+            audio(src="generated/time_stretch/y_playback_ex.wav" controls) 
+            audio(src="generated/time_stretch/y_playback_res.wav" controls)
+            p.fragment En pratique : faire comme si le signal avait été échantilloné à $1.5 \times F_{ech}$
+
+    section(title="Étirement temporel")
+        figure
+            img(src="generated/time_stretch/time_stretch.png")
+            figcaption Création d'un signal $1.5 \times$ plus court
+            audio(src="generated/time_stretch/y_time_stretch_ex.wav" controls) 
+            audio(src="generated/time_stretch/y_time_stretch_res.wav" controls)
+            p.fragment En pratique : créer un sonagramme étiré, puis ajuster les phases
+
+    section(title="Étirement temporel")
+        pre
+            code.data-trim.data-noescape.language-matlab
+                | Y     = TFTC(y)
+                | C     = 1 : pourcentage : size(Y, 2)
+                | ϕ     = angle(Y(:, 1))
+                | 
+                | for i = 1:len(C)
+                |   c           = floor(C(i))
+                |   α           = C(i) - c
+                |   ρ           = (1 - α) * |Y(:, c)| + α * |Y(:, c+1)|
+                |   Y'(:, i)    = ρ * exp(j ϕ)  % des idées de génie
+                |   dϕ          = angle(Y(:, c+1)) - angle(Y(:, c))
+                |   ϕ           = ϕ + dϕ 
+                | end
+
+    section(title="Transposition")
+        figure
+            img(src="generated/time_stretch/pitch_shift.png")
+            figcaption Création d'un signal $1.5 \times$ plus aigu
+            audio(src="generated/time_stretch/y_pitch_shift_ex.wav" controls) 
+            audio(src="generated/time_stretch/y_pitch_shift_res.wav" controls)
+            br
+            ul 
+                li.fragment Étirer le signal d'un facteur $1.5$
+                li.fragment Le lire $1.5 \times$ plus vite

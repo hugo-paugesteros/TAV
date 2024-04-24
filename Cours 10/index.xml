@@ -1,0 +1,483 @@
+
+<section title="Cours 10">
+  <blockquote> 
+    <p>Vas-y DJ fais péter le son</p>
+    <footer>Fatal Bazooka</footer>
+  </blockquote>
+  <section title="Représentation temporelle">
+    <h3>Onde sonore</h3>
+    <svg id="waveform"></svg>
+    <script>
+      SVG.Svg.prototype.viewrange = function(xMin, xMax, yMin, yMax) {
+          this.xMin = xMin
+          this.xMax = xMax
+          this.yMin = yMin
+          this.yMax = yMax
+          return this
+      }
+      
+      SVG.Svg.prototype.scale = function(point) {
+          let xPerc = (point.x - this.xMin) / (this.xMax - this.xMin)
+          let yPerc = (point.y - this.yMin) / (this.yMax - this.yMin)
+          return {x: xPerc * this.viewbox().width, y: this.viewbox().height * (1 - yPerc)}
+      }
+      
+      SVG.Svg.prototype.getPath = function(x, y) {
+          return y.reduce(
+          (acc, curr, k) => {
+              let point = this.scale({x: x[k], y: curr})
+              if(k == 0) return `M ${point.x} ${point.y} `
+              return acc + `L ${point.x} ${point.y} `
+          }, '')
+      }
+      
+    </script>
+    <script>
+      let sr = 44100
+      let svg = SVG('#waveform').viewbox(0, 0, 10, 2).viewrange(0, 0.02, -1.05, 1.05)
+      let t = new Array(1 * sr).fill().map((_, i) => i / sr)
+      let y = t.map((t, _) => Math.cos(2 * Math.PI * 440 * t))
+      let path = svg.getPath(t.slice(0, 1000), y.slice(0, 1000))
+      svg.path().plot(path)
+      
+    </script>
+    <section title="Propagation">
+      <script src="wave-propagation/wave-propagation.js" type="module"></script>
+      <wave-propagation></wave-propagation>
+      <blockquote class="fragment"> 
+        <p style="font-style: normal;"><span class="fragment" style="font-style: italic">[C'est grâce à la propagation longitudinale de la vibration mécanique d'un fluide que] </span><span style="font-weight:500">j'entends le loup, le renard et la belette</span></p>
+        <footer>Tri Yann</footer>
+      </blockquote>
+    </section>
+    <section title="Caractéristiques">
+      <section>
+        <script src="wave-generator/wave-generator.js" type="module"></script>
+        <wave-generator> </wave-generator>
+      </section>
+      <section title="Intensité ↔ Amplitude">
+        <p>Généralement, valeurs codées dans $[-1;1]$</p>
+      </section>
+      <section title="Hauteur ↔ Fréquence">
+        <p>Oreille humaine moyenne : $[20Hz ; 20kHz]$</p>
+      </section>
+      <section title="Timbre ↔ Forme d'onde">
+        <p>Permet de différencier les voix, les instruments</p>
+      </section>
+    </section>
+    <section title="Du continu au discret">
+      <section title="Quantification">
+        <script src="wave-quantization/wave-quantization.js" type="module"></script>
+        <wave-quantization></wave-quantization>
+      </section>
+      <section title="Échantillonage">
+        <script src="wave-sampling/wave-sampling.js" type="module"></script>
+        <wave-sampling></wave-sampling>
+      </section>
+      <section title="Problème">
+        <script src="wave-nyquist/wave-nyquist.js" type="module"></script>
+        <wave-nyquist> </wave-nyquist>
+      </section>
+      <section title="Hélicoptère">
+        <script src="sub-sampling/sub-sampling.js" type="module"></script>
+        <sub-sampling></sub-sampling>
+      </section>
+      <section title="Sous-Échantillonage">
+        <script src="wave-sampling/wave-sampling.js" type="module"></script>
+        <wave-sampling></wave-sampling>
+        <p class="fragment">Théorème de Nyquist-Shannon : $F_e \geq 2 \cdot f_{max}$</p>
+      </section>
+    </section>
+  </section>
+  <section title="Représentation fréquentielle">
+    <h3>Transformée de Fourier</h3>
+    <script src="fourier-series/fourier-series.js"> </script>
+    <fourier-series></fourier-series>
+    <section>
+      <section title="Motivations">
+        <p>Représentation qui permet de manipuler la hauteur / le timbre</p>
+      </section>
+      <section title="Objectifs">
+        <p>Retrouver les différentes fréquences présentes dans un signal</p>
+      </section>
+      <section title="Décomposition">
+        <ul>
+          <li class="fragment" data-fragment-index="1">Existence de fonctions permettant une décomposition fréquentielle ?<span class="fragment response" data-fragment-index="5">Oui !</span></li>
+          <li class="fragment" data-fragment-index="2">Lequelles choisir ?<span class="fragment response" data-fragment-index="4">Des sinusoïdes ! </span></li>
+          <li class="fragment" data-fragment-index="3">Algorithme ?<span class="fragment response" data-fragment-index="6">Mais c'est formidable ! </span></li>
+        </ul>
+      </section>
+    </section>
+    <section title="Quelques observations sur le produit scalaire">
+      <script src="inner-product/inner-product.js"></script>
+      <section title="Une sinusoïde">
+        <inner-product id="one-sine"></inner-product>
+        <input-range id="freqRange" min="0" max="10" style="display: inline-flex"></input-range>
+        <script type="module">
+          window.customElements.whenDefined('inner-product').then(() => {
+              let inner_product   = document.querySelector('inner-product#one-sine')
+              let freqRange       = document.querySelector('#one-sine + #freqRange')
+              
+              inner_product.f2 = inner_product.t.map((t, _) => Math.sin(2 * Math.PI * freqRange.value * t))
+              inner_product.update()
+          
+              freqRange.addEventListener('input', () => {
+                  inner_product.f2 = inner_product.t.map((t, _) => Math.sin(2 * Math.PI * freqRange.value * t))
+                  inner_product.update()
+              })
+          })
+          
+        </script>
+      </section>
+      <section title="Une somme de sinusoïdes">
+        <inner-product id="two-sines"></inner-product>
+        <input-range id="freqRange" min="0" max="10" style="display: inline-flex"></input-range>
+        <script type="module">
+          window.customElements.whenDefined('inner-product').then(() => {
+              let inner_product   = document.querySelector('inner-product#two-sines')
+              let freqRange       = document.querySelector('#two-sines + #freqRange')
+              
+              inner_product.f1 = inner_product.t.map((t, _) => 
+                  0.5 * Math.sin(2 * Math.PI * 4 * t) +
+                  0.5 * Math.sin(2 * Math.PI * 8 * t)
+              )
+              inner_product.f2 = inner_product.t.map((t, _) => Math.sin(2 * Math.PI * freqRange.value * t))
+              inner_product.update()
+          
+              freqRange.addEventListener('input', () => {
+                  inner_product.f2 = inner_product.t.map((t, _) => Math.sin(2 * Math.PI * freqRange.value * t))
+                  inner_product.update()
+              })
+          })
+          
+        </script>
+      </section>
+      <section title="Un problème de phase">
+        <inner-product id="phase"></inner-product>
+        <input-range id="freqRange" min="0" max="10" style="display: inline-flex"></input-range>
+        <input-range id="phaseRange" min="0" step="30" max="360" style="display: inline-flex"></input-range>
+        <script type="module">
+          window.customElements.whenDefined('inner-product').then(() => {
+              let inner_product   = document.querySelector('inner-product#phase')
+              let freqRange       = document.querySelector('#phase + #freqRange')
+              let phaseRange       = document.querySelector('#phase ~ #phaseRange')
+              
+              inner_product.f1 = inner_product.t.map((t, _) => 
+                  Math.sin(2 * Math.PI * 4 * t + 2 * Math.PI * phaseRange.value / 360)
+              )
+              inner_product.f2 = inner_product.t.map((t, _) => Math.sin(2 * Math.PI * freqRange.value * t))
+              inner_product.update()
+          
+              freqRange.addEventListener('input', () => {
+                  inner_product.f2 = inner_product.t.map((t, _) => Math.sin(2 * Math.PI * freqRange.value * t))
+                  inner_product.update()
+              })
+          
+              phaseRange.addEventListener('input', () => {
+                  inner_product.f1 = inner_product.t.map((t, _) => 
+                      Math.sin(2 * Math.PI * 4 * t + 2 * Math.PI * phaseRange.value / 360)
+                  )
+                  inner_product.update()
+              })
+          })
+          
+        </script>
+      </section>
+      <section title="Une solution">
+        <div id="complex">
+          <div style="display: flex; gap:1em;">
+            <inner-product style="flex-grow:1;"></inner-product>
+            <inner-product style="flex-grow:1;"></inner-product>
+          </div>
+          <svg id="circle" style="width: 200px;"></svg><br/>
+          <input-range id="freqRange" min="0" max="10" style="display: inline-flex"></input-range>
+          <input-range id="phaseRange" min="0" step="30" max="360" style="display: inline-flex"></input-range>
+        </div>
+        <script type="module">
+          window.customElements.whenDefined('inner-product').then(() => {
+              let inner_product_cos   = document.querySelector('#complex inner-product:nth-child(1)')
+              let inner_product_sin   = document.querySelector('#complex inner-product:nth-child(2)')
+              let circle_svg          = SVG('#complex #circle').viewbox(-1.05, -1.05, 2.1, 2.1)
+              let freqRange           = document.querySelector('#complex #freqRange')
+              let phaseRange          = document.querySelector('#complex #phaseRange')
+          
+              circle_svg.circle(2).cx(0).cy(0).css({fill: 'none'})
+              let point = circle_svg.circle(.1).cx(0).cy(0)
+              let cos_line = circle_svg.line().plot(0,0,0,0).stroke('green')
+              let sin_line = circle_svg.line().plot(0,0,0,0).stroke('red')
+          
+              inner_product_cos.progress.stroke('green')
+              inner_product_sin.progress.stroke('red')
+          
+              freqRange.addEventListener('input', () => update())
+              phaseRange.addEventListener('input', () => update())
+          
+              function update() {
+                  inner_product_cos.f1 = inner_product_cos.t.map((t, _) => 
+                      Math.sin(2 * Math.PI * 4 * t + 2 * Math.PI * phaseRange.value / 360)
+                  )
+                  inner_product_sin.f1 =  inner_product_cos.f1
+          
+                  inner_product_cos.f2 = inner_product_cos.t.map((t, _) => Math.cos(2 * Math.PI * freqRange.value * t))
+          
+                  inner_product_sin.f2 = inner_product_sin.t.map((t, _) => Math.sin(2 * Math.PI * freqRange.value * t))
+                  inner_product_cos.update()
+                  inner_product_sin.update()
+          
+                  point.animate()
+                      .cx(inner_product_cos.product/100)
+                      .cy(-inner_product_sin.product/100)
+                  cos_line.animate().plot(0, 0, inner_product_cos.product/100, 0)
+                  sin_line.animate().plot(inner_product_cos.product/100, 0, inner_product_cos.product/100, -inner_product_sin.product/100)
+              }
+          
+              update()
+          })
+          
+        </script>
+      </section>
+      <section title="Reconstruction ?">
+        <p>Pour un signal de taille $n$, il suffit de le comparer avec $n$ paires de $\cos$ / $\sin$ pour pouvoir effectuer une reconstruction parfaite !</p>
+      </section>
+    </section>
+    <section title="Discrete Fourier Transform">
+      <section title="Définition">
+        <p>$$ X(k) \coloneqq \langle x, f_k \rangle = \sum_{n = 0}^{N - 1} x(n) \exp(-2 \pi i n k / N), \qquad k = 0, 1, \dots, N - 1 $$</p>
+        <p>Quelques propriétés :</p>
+        <ul> 
+          <li class="fragment">$n \mapsto \exp(-2 \pi i n k / N)$ correspond à une sinusoïde complexe de fréquence $\frac{k \cdot f_{ech}}{N}$</li>
+          <li class="fragment">La DFT d'un signal de taille $N$ est $N$-périodique</li>
+          <li class="fragment">Si $x \in \R^N$, alors $X(k) = \bar{X}(N - k)$ pour $k \in 1, \dots, N-1$</li>
+        </ul>
+      </section>
+      <section title="Inverse DFT">
+        <p>$$ x(n) \coloneqq \sum_{k=0}^{N-1} \langle x, f_k \rangle \frac{f_k}{\|f_k\|} = \frac{1}{N} \sum_{k=0}^{N-1} X(k) \exp(2 \pi i k n / N), \qquad n = 0, 1, \dots, N - 1 $$</p>
+      </section>
+      <section title="FFT">
+        <p>Algorithme rapide de calcul de la DFT (directe ou inverse) dans le cas d'un signal de taille $2^n$</p>
+      </section>
+    </section>
+    <section title="Fuite spectrale">
+      <section title="Problème">
+        <inner-product id="windowing"></inner-product>
+        <input-range id="freqRange" min="0" max="10" style="display: inline-flex"></input-range>
+        <script type="module">
+          window.customElements.whenDefined('inner-product').then(() => {
+              let inner_product   = document.querySelector('inner-product#windowing')
+              let freqRange       = document.querySelector('#windowing + #freqRange')
+              let exact = true
+              
+              inner_product.f2 = inner_product.t.map((t, _) => Math.sin(2 * Math.PI * freqRange.value * t))
+              inner_product.update()
+          
+              inner_product.addEventListener('click', () => {
+                  exact = !exact
+                  if (exact) {
+                      inner_product.f1 = inner_product.t.map((t, _) => Math.sin(2 * Math.PI * 4 * t))
+                  } else {
+                      inner_product.f1 = inner_product.t.map((t, _) => Math.sin(2 * Math.PI * 4.1 * t))
+                  }
+                  inner_product.update()
+              })
+          
+              freqRange.addEventListener('input', () => {
+                  inner_product.f2 = inner_product.t.map((t, _) => Math.sin(2 * Math.PI * freqRange.value * t))
+                  inner_product.update()
+              })
+          })
+          
+        </script>
+      </section>
+      <section title="Solution">
+        <script type="module" src="dft-plot/dft-plot.js"> </script>
+        <dft-plot></dft-plot>
+      </section>
+    </section>
+  </section>
+  <section title="Représentation fréquentio-temporelle">
+    <h3>Transformée de Fourier à Court Terme</h3>
+    <blockquote> 
+      <p>Le coupé-décalé du traitement du signal</p>
+      <footer>Télérama</footer>
+    </blockquote>
+    <section title="Motivations">
+      <section title="Problème">
+        <svg id="twofreqs"></svg>
+        <script type="module">
+          let sr = 44100
+          let svg = SVG('#twofreqs').viewbox(0, 0, 10, 2).viewrange(0, 1, -1.05, 1.05)
+          let t = new Array(1 * sr).fill().map((_, i) => i / sr)
+          let y = t.map((t, _) => (t &lt; 0.5) ? Math.cos(2 * Math.PI * 4/0.5 * t) : Math.cos(2 * Math.PI * 8/0.5 * t))
+          let path = svg.getPath(t, y)
+          svg.path().plot(path)
+          
+        </script>
+        <svg id="twofreqsdft"></svg>
+        <script type="module">
+          let sr = 44100
+          let svg = SVG('#twofreqsdft').viewbox(0, 0, 10, 2).viewrange(0, 1000, 0, 1.05)
+          let f = new Array(sr/2).fill().map((_, i) => i)
+          let y = f.map((t, _) => 0)
+          y[440] = 0.5
+          y[840] = 0.5
+          let path = svg.getPath(f, y)
+          svg.path().plot(path)
+          
+        </script>
+      </section>
+      <section title="Solution">
+        <svg id="twofreqs2"></svg>
+        <script type="module">
+          let sr = 44100
+          let svg = SVG('#twofreqs2').viewbox(0, 0, 10, 2).viewrange(0, 1, -1.1, 1.1)
+          let t = new Array(1 * sr).fill().map((_, i) => i / sr)
+          let y = t.map((t, _) => (t &lt; 0.5) ? Math.cos(2 * Math.PI * 4/0.5 * t) : Math.cos(2 * Math.PI * 8/0.5 * t))
+          let path = svg.getPath(t, y)
+          svg.path().plot(path)
+          
+          let rect1 = svg.rect(10/2, 1.9).y(0.05).css({fill: 'none', stroke: 'rgba(255,0,0,.8)'}).addClass('fragment').attr({'data-fragment-index': 1})
+          let rect2 = svg.rect(10/2, 1.9).y(0.05).x(2.5).css({fill: 'none', stroke: 'rgba(0,255,0,.8)'}).addClass('fragment').attr({'data-fragment-index': 2})
+          let rect3 = svg.rect(10/2, 1.9).y(0.05).x(5).css({fill: 'none', stroke: 'rgba(0,0,255,.8)'}).addClass('fragment').attr({'data-fragment-index': 3})
+          
+        </script>
+        <figure style="display:flex; gap:1em;" id="twofreqs2dft">
+          <svg></svg>
+          <svg></svg>
+          <svg></svg>
+        </figure>
+        <script type="module">
+          let sr = 44100
+          let svg1 = SVG('#twofreqs2dft svg:nth-child(1)').viewbox(0, 0, 3, 1).viewrange(0, 1320, 0, 1.05).addClass('fragment').attr({'data-fragment-index': 1})
+          let svg2 = SVG('#twofreqs2dft svg:nth-child(2)').viewbox(0, 0, 3, 1).viewrange(0, 1320, 0, 1.05).addClass('fragment').attr({'data-fragment-index': 2})
+          let svg3 = SVG('#twofreqs2dft svg:nth-child(3)').viewbox(0, 0, 3, 1).viewrange(0, 1320, 0, 1.05).addClass('fragment').attr({'data-fragment-index': 3})
+          let f = new Array(sr/2).fill().map((_, i) => i)
+          let y1 = f.map((t, _) => 0)
+          y1[440] = 1
+          svg1.path().plot(svg1.getPath(f, y1))
+          
+          let y2 = f.map((t, _) => 0)
+          y2[440] = .5
+          y2[880] = .5
+          svg2.path().plot(svg2.getPath(f, y2))
+          
+          let y3 = f.map((t, _) => 0)
+          y3[880] = 1
+          svg3.path().plot(svg3.getPath(f, y3))
+        </script>
+      </section>
+    </section>
+    <section title="Transformée de Fourier à Court Terme">
+      <section title="Définition">
+        <p>
+          <![CDATA[
+          $$ 
+          \begin{aligned}
+              \mathcal{X}(m, k) = \sum_{n = 0}^{N-1} x(n + mH)w(n)\exp(-2 \pi i k n / N) 
+              \qquad 	k &= 0, 1, \dots, N - 1 \\
+                      m &= 0, 1, \dots, \lfloor \frac{L-N}{H} \rfloor
+          \end{aligned}
+          $$
+          ]]>
+          
+        </p>
+        <ul> 
+          <li class="fragment">$T(m) \triangleq \frac{m \cdot H}{f_{ech}}$</li>
+          <li class="fragment">$F(k) \triangleq \frac{k \cdot f_{ech}}{N}$</li>
+        </ul>
+      </section>
+      <section title="Inverse">
+        <p>Existe, sous certaines conditions</p>
+      </section>
+    </section>
+    <section title="Spectrogramme / Sonagramme">
+      <section>
+        <figure><img src="generated/spectrograms/spectrogram_linear.png"/>
+          <figcaption>$$ S(k, m) \triangleq |Y(k, m)|^2 $$</figcaption>
+        </figure>
+      </section>
+      <section>
+        <figure><img src="generated/spectrograms/spectrogram_log.png"/>
+          <figcaption>
+            $$ \begin{aligned}
+            S_{dB}(k, m)    &amp; \triangleq 10 \cdot \log10 \left( S(k, m) \right) \\
+                            &amp;= 20 \cdot \log10 \left( |Y(k, m)| \right) 
+            \end{aligned} $$
+          </figcaption>
+          <audio src="generated/spectrograms/the_lamp.wav" controls="controls"></audio>
+        </figure>
+      </section>
+    </section>
+  </section>
+  <section title="Effets audio">
+    <blockquote> 
+      <p>But I knew I needed a click, so we put a click on the 24-track<br/>Which then was synced to the Moog Modular<br/>I knew that could be a sound of the future<br/>But I didn't realize how much the impact would be</p>
+      <footer>Giovanni Giorgio, but everybody calls him Giorgio</footer>
+    </blockquote>
+    <section title="Filtres">
+      <section title="Passe-bas">
+        <figure><img src="generated/effects/lp.png"/>
+          <figcaption>Coupure des fréquences au delà de $1000Hz$</figcaption>
+          <audio src="generated/effects/y_lp_ex.wav" controls="controls"> </audio>
+          <audio src="generated/effects/y_lp_res.wav" controls="controls"> </audio>
+        </figure>
+      </section>
+      <section title="Passe-haut">
+        <figure><img src="generated/effects/hp.png"/>
+          <figcaption>Coupure des fréquences en deçà de $1000Hz$</figcaption>
+          <audio src="generated/effects/y_hp_ex.wav" controls="controls"> </audio>
+          <audio src="generated/effects/y_hp_res.wav" controls="controls"> </audio>
+        </figure>
+      </section>
+      <section title="Compression">
+        <figure><img src="generated/effects/comp.png"/>
+          <figcaption>Décimation des plus faibles coefficients de Fourier</figcaption>
+          <audio src="generated/effects/y_comp_ex.wav" controls="controls"> </audio>
+          <audio src="generated/effects/y_comp_res.wav" controls="controls"> </audio>
+        </figure>
+      </section>
+    </section>
+    <section title="Étirement temporel">
+      <section title="Vitesse de lecture">
+        <figure><img src="generated/time_stretch/playback.png"/>
+          <figcaption>Lecture d'un signal $1.5 \times$ plus rapidement</figcaption>
+          <audio src="generated/time_stretch/y_playback_ex.wav" controls="controls"> </audio>
+          <audio src="generated/time_stretch/y_playback_res.wav" controls="controls"></audio>
+          <p class="fragment">En pratique : faire comme si le signal avait été échantilloné à $1.5 \times F_{ech}$</p>
+        </figure>
+      </section>
+      <section title="Étirement temporel">
+        <figure><img src="generated/time_stretch/time_stretch.png"/>
+          <figcaption>Création d'un signal $1.5 \times$ plus court</figcaption>
+          <audio src="generated/time_stretch/y_time_stretch_ex.wav" controls="controls"> </audio>
+          <audio src="generated/time_stretch/y_time_stretch_res.wav" controls="controls"></audio>
+          <p class="fragment">En pratique : créer un sonagramme étiré, puis ajuster les phases</p>
+        </figure>
+      </section>
+      <section title="Étirement temporel">
+        <pre><code class="data-trim data-noescape language-matlab">Y     = TFTC(y)
+C     = 1 : pourcentage : size(Y, 2)
+ϕ     = angle(Y(:, 1))
+ 
+for i = 1:len(C)
+  c           = floor(C(i))
+  α           = C(i) - c
+  ρ           = (1 - α) * |Y(:, c)| + α * |Y(:, c+1)|
+  Y'(:, i)    = ρ * exp(j ϕ)  % des idées de génie
+  dϕ          = angle(Y(:, c+1)) - angle(Y(:, c))
+  ϕ           = ϕ + dϕ 
+end</code></pre>
+      </section>
+      <section title="Transposition">
+        <figure><img src="generated/time_stretch/pitch_shift.png"/>
+          <figcaption>Création d'un signal $1.5 \times$ plus aigu</figcaption>
+          <audio src="generated/time_stretch/y_pitch_shift_ex.wav" controls="controls"> </audio>
+          <audio src="generated/time_stretch/y_pitch_shift_res.wav" controls="controls"></audio><br/>
+          <ul> 
+            <li class="fragment">Étirer le signal d'un facteur $1.5$</li>
+            <li class="fragment">Le lire $1.5 \times$ plus vite</li>
+          </ul>
+        </figure>
+      </section>
+    </section>
+  </section>
+  <section><img src="generated/qr-code.svg" alt="" srcset=""/></section>
+</section>

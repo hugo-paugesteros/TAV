@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+svg {
+    stroke: black;
+    stroke-width: 0.01;
+    /* max-height: 200px; */
+
+    path {
+        fill: none;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: black;
+        color: white;
+    }
+
+    svg {
+        stroke: white;
+        fill: transparent;
+
+        path {
+            /* stroke-width: 1; */
+        }
+
+        circle, rect {
+            fill: white;
+        }
+    }
+
+}
+
+.reveal {
+    font-family: Lato;
+    font-weight: 300;
+    line-height: 1.5;
+
+    h1, h2, h3, h4, p {
+        text-transform: none;
+    }
+
+    li {
+        line-height: 2;
+    }
+
+    pre {
+        font-size: 1em;
+        code {
+            max-height: none;
+        }
+    }
+
+}
+
+.response {
+    color : green;
+    margin: 0 1em;
+}
+
+.reveal blockquote {
+    padding: 1em;
+    font-style: normal;
+
+    p {
+        margin: 0;
+        &::before {
+            content: "“";
+        }
+        &::after{
+            content: "”";
+        }
+    }
+
+    footer {
+        &::before {
+            content: '- ';
+        }
+        text-align: right;
+    }
+}
