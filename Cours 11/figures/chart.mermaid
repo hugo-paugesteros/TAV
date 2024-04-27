@@ -1,0 +1,24 @@
+flowchart LR
+    subgraph Shazam
+        subgraph Pré-traitement
+        direction LR
+        id1[(Base de données \n Chansons)]
+        -- Fichier audio -->
+        id2[Calcul d'empreintes]
+        --Empreintes-->
+        id3[(Base de données \n Empreintes)]
+        end
+        id3<--Empreintes-->id4
+        id4[Comparaison d'empreintes]
+    end
+
+    subgraph Utilisateur
+        direction LR
+        id5([Enregistrement d'un extrait])
+        -->
+        id6[Calcul d'empreintes]
+        --Empreintes--->
+        id4
+    end
+
+    id4 --> id7([Résultat])

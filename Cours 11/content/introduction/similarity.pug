@@ -1,0 +1,7 @@
+section(title="Similarités ?")
+
+    table
+        each val in ["Eschenbach", "Furtwangler", "Karajan", "Listz", "Stupeflip"]
+            tr.fragment
+                th= val
+                td: audio(src=`audio/samples/${val}.wav` controls)

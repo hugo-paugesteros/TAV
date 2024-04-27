@@ -1,400 +1,330 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Document</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/theme/black.css">
-<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.min.js"></script><link rel="stylesheet" href="css/main.css">
-</head>
-<body>
-<div class="reveal"><div class="slides">
-<section><h1>Reconnaissance musicale</h1></section>
-
-	<section><h2>Rappels</h2></section>
-
-	<section><h3>Notations</h3>
-
-	<table style="font-size: 14px;">
-		<tr>
-			<th>Nom</th>
-			<th>Symbole</th>
-			<th>Définition</th>
-			<th>Remarques</th>
-		</tr>
-		<tr>
-			<td>Signal sonore</td>
-			<td>$y$</td>
-			<td></td>
-			<td>$y \in [-1;1]^L$</td>
-		</tr>
-		<tr>
-			<td>Fréquence d'échantillonage</td>
-			<td>$f_{ech}$</td>
-			<td>Fréquence à laquelle l'onde sonore est échantillonée</td>
-			<td>Souvent, $f_{ech} = 44.1kHz$</td>
-		</tr>
-		<tr>
-			<td>Transformée de Fourier à Court Terme (TFCT)</td>
-			<td>$Y(m, k)$</td>
-			<td>$$\sum_{n=0}^{N} y(n + mH) w(n) \exp(-2 \pi n \frac{k}{N})$$</td>
-			<td>
-				$m$ est relié à l'origine temporelle de la fenêtre analysée.
-				<br>
-				$k$ est relié à la fréquence analysée.
-				<br>
-				En pratique : $Y[k, m]$.
-			</td>
-		</tr>
-		<tr>
-			<td>Sonagramme / Spectrogramme</td>
-			<td>$S(m,k)$</td>
-			<td>$$|Y(m,k)|^2$$</td>
-			<td>$$S_{dB} \coloneqq 10 \cdot \log10(S(m,k)) $$</td>
-			<td></td>
-		</tr>
-	</table>
-
-</section>
-
-
-	<section><h2>Introduction</h2></section>
-
-	<section><h3>Similarité ?</h3>
-
-	<table>
-		<tr>
-			<th class="fragment">Eschenbach</th>
-			<td><audio src="audio/samples/Eschenbach.wav" controls=""></audio></td>
-		</tr>
-		<tr>
-			<th class="fragment">Furtwangler</th>
-			<td><audio src="audio/samples/Furtwangler.wav" controls=""></audio></td>
-		</tr>
-		<tr>
-			<th class="fragment">Karajan</th>
-			<td><audio src="audio/samples/Karajan.wav" controls=""></audio></td>
-		</tr>
-		<tr>
-			<th class="fragment">Listz</th>
-			<td><audio src="audio/samples/Listz.wav" controls=""></audio></td>
-		</tr>
-		<tr>
-			<th class="fragment">Stupeflip</th>
-			<td><audio src="audio/samples/Stupeflip.wav" controls=""></audio></td>
-		</tr>
-	</table>
-
-</section>
-	<section><h3>Propriétés souhaitées</h3>
-
-	<ul>
-		<li><b>Spécifique / discriminant</b></li>
-		<li><b>Compact</b></li>
-		<li><b>Robuste</b></li>
-		<li><b>Rapide à comparer</b></li>
-	</ul>
-
-</section>
-	<section><h3>Transformations</h3>
-
-	<section><h4></h4>
-		<table>
-			<tr>
-				<th>Original</th>
-				<td><audio src="audio/transforms/original.wav" controls=""></audio></td>
-			</tr>
-			<tr>
-				<th>Bruit parole</th>
-				<td><audio src="audio/transforms/bruit_parole.wav" controls=""></audio></td>
-			</tr>
-			<tr>
-				<th>Bruit</th>
-				<td><audio src="audio/transforms/bruit.wav" controls=""></audio></td>
-			</tr>
-			<tr>
-				<th>Compression</th>
-				<td><audio src="audio/transforms/compression.wav" controls=""></audio></td>
-			</tr>
-			<tr>
-				<th>Étirement temporel</th>
-				<td><audio src="audio/transforms/etirement_temporel.wav" controls=""></audio></td>
-			</tr>
-			<tr>
-				<th>Transposition</th>
-				<td><audio src="audio/transforms/transposition.wav" controls=""></audio></td>
-			</tr>
-		</table>
-	</section>
-
-	<section><h4></h4>
-		<figure>
-			<img src="figures/transformations/transformations.png" alt="">
-			<figcaption></figcaption>
-		</figure>
-	</section>
-
-</section>
-	<section><h3>Fonctionnement général</h3>
-
-	<section><h4></h4>
-		<figure>
-			<img src="figures/presentation.svg" alt="" style="width: 120%;">
-			<figcaption>Fonctionnement général</figcaption>
-		</figure>
-	</section>
-
-	<section><h4></h4>
-
-		<figure>
-			<img style="    width: 400px;    height: 300px;    object-fit: cover;    object-position: 0 0;    box-shadow: 0 0 40px 5px #000;     " src="figures/wang.png" alt="">
-		</figure>
-	
-	</section>
-
-</section>
-
-
-	<section><h2>Algorithme</h2></section>
-
-	<section><h3>Version 1</h3>
-
-	<section><h4>Création des empreintes</h4>
-
-	<figure>
-		<img src="figures/pics_spectraux.png" alt="">
-	</figure>
-
-	
-	$$
-	(m_0, k_0) \quad / \quad
-	\begin{cases}
-	\forall m \in [m_0 - \eta_t, m_0 + \eta_t] \\
-	\forall k \in [k_0 - \eta_f, k_0 + \eta_f]
-	\end{cases}
-	\quad
-	S_{dB}(m_0, k_0) \ge \max(S_{dB}(m, k), \epsilon)
-	$$
-	
-
-</section>
-	<section><h4>Stockage des empreintes</h4>
-
-	<table>
-		<tr>
-			<th>morceau n°</th>
-			<th>$m$</th>
-			<th>$k$</th>
-		</tr>
-		<tr>
-			<td>1</td>
-			<td>2</td>
-			<td>45</td>
-		</tr>
-		<tr>
-			<td>$\vdots$</td>
-			<td>$\vdots$</td>
-			<td>$\vdots$</td>
-		</tr>
-		<tr>
-			<td>132</td>
-			<td>51</td>
-			<td>245</td>
-		</tr>
-	</table>
-
-</section>
-	<section><h4>Comparaison des empreintes</h4>
-
-	<figure>
-		<img src="figures/comparison1/decalage.gif" alt="">
-	</figure>
-
-</section>
-	<section><h4>Compléxité</h4>
-
-	<pre class="language-matlab">
-		<code>
-			for id = 1:n_chansons
-				entrees = bdd(id)
-				for decalage = 1:n_decalages
-					for [m, k] in entrees
-						for [m', k'] in requete
-							if (m' + decalage == m) and (k' == k)
-								resultats[id][decalage]++
-							end
-						end
-					end
-				end
-			end
-		</code>
-	</pre>
-
-	$$ C = n_\text{chansons} \times n_\text{décalages} \times n_\text{pics par chanson} \times n_\text{pics par extrait} $$
-
-</section>
-
-</section>
-	<section><h3>Version 1 (bis)</h3>
-
-	<section><h4>Comparaison</h4>
-
-	<pre class="language-matlab">
-		<code>
-			for id = 1:n_chansons
-				entrees = bdd(id)
-				for [m, k] in entrees
-					for [m', k'] in requete
-						if (k' == k)
-							resultats[id][m' - m]++
-						end
-					end
-				end
-			end
-		</code>
-	</pre>
-
-	$$ C = n_\text{chansons} \times n_\text{pics par chanson} \times n_\text{pics par extrait} $$
-
-</section>
-
-</section>
-	<section><h3>Version 2</h3>
-
-	<section><h4>Stockage des empreintes</h4>
-
-	<table>
-		<tr>
-			<th>$k$</th>
-			<th>$m$</th>
-			<th>morceau n°</th>
-		</tr>
-		<tr>
-			<td>45</td>
-			<td>2</td>
-			<td>1</td>
-		</tr>
-		<tr>
-			<td>$\vdots$</td>
-			<td>$\vdots$</td>
-			<td>$\vdots$</td>
-		</tr>
-		<tr>
-			<td>245</td>
-			<td>51</td>
-			<td>132</td>
-		</tr>
-	</table>
-
-</section>
-	<section><h4>Comparaison</h4>
-
-	<pre class="language-matlab">
-		<code>
-			for (m, k) = pics_requete
-				entrees = bdd(k)
-				for [~, m', id] in entrees
-					resultat[id][m' - m]
-				end
-			end
-		</code>
-	</pre>
-
-	$$ C = n_\text{pics par extrait} \times \frac{n_\text{chansons} \times n_\text{pics par chanson}}{256} $$
-
-</section>
-
-</section>
-	<section><h3>Version 3</h3>
-
-	<section><h4>Création des empreintes</h4>
-
-	<figure>
-		<img style="width:600px;" src="figures/appariements.png" alt="">
-	</figure>
-
-	<p>On associe un pic $(m_0, k_0)$ au pic $(m ,k)$ si :</p>
-	<ul>
-		<li>$0 \lt m - m_0 \le \delta_t$</li>
-		<li>$|k - k_0| \le \delta_f$</li>
-	</ul>
-	<p>On ne garde que $n_v$ paires, constitués des pics les plus proches</p>
-
-</section>
-	<section><h4>Stockage des empreintes</h4>
-
-	<table>
-		<tr>
-			<th>$(k_i, k_j, m_j - m_i)$</th>
-			<th>$m_i$</th>
-			<th>morceau n°</th>
-		</tr>
-		<tr>
-			<td>$(23,45,52)$</td>
-			<td>6</td>
-			<td>1</td>
-		</tr>
-		<tr>
-			<td>$\vdots$</td>
-			<td>$\vdots$</td>
-			<td>$\vdots$</td>
-		</tr>
-		<tr>
-			<td>$(174, 154, 84)$</td>
-			<td>498</td>
-			<td>132</td>
-		</tr>
-	</table>
-
-</section>
-	<section><h4>Comparaison des empreintes</h4>
-
-	<pre class="language-matlab">
-		<code>
-			for (m_i, k_i, m_j, k_j) = paires_requete
-				entrees = bdd(k_i, k_j, m_j - m_i)
-				for [~, morceau_m_i, id] in entrees
-					resultats[id][morceau_m_i - m_i]++
-				end
-			end
-		</code>
-	</pre>
-
-	$$ C = n_\text{pics par extrait} \times n_v \times \frac{ n_\text{chansons} \times n_\text{pics par chanson} \times n_v }{2^{32}}$$
-
-</section>
-
-</section>
-
-
-
-</div></div>
-<script>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Reconnaissance musicale</title><script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/3.2.0/svg.min.js"></script><script src="svg.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css"><script defer="True" src="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.js"></script><script defer="True" src="https://cdn.jsdelivr.net/npm/katex/dist/contrib/auto-render.min.js"></script><script>
+                document.addEventListener("DOMContentLoaded", function() {
                     renderMathInElement(document.body, {
                         delimiters: [
-                            {left: "$$", right: "$$", display: true},
-                            {left: "$", right: "$", display: false}
+                            {left: '$$', right: '$$', display: true},
+                            {left: '$', right: '$', display: false},
                         ],
-						ignoredTags : ["script", "noscript", "style", "textarea", "option"]
+                        throwOnError : false
                     });
-            </script><script>
+                    hljs.highlightAll();
+                });
+            </script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.min.css">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/theme/black.css"><script src="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.min.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/matlab.min.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/a11y-dark.css" integrity="sha512-d/XggqGycQ04tWRYDW0iD5E/1WjEpvg+9iUvVKHkq/eUuwtGAB+5Rl3cSuSL1znHXTRMr6g1w22jVu4yNvK2xQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
+      <link rel="stylesheet" href="style.css">
+   </head>
+   <body>
+      <div class="reveal">
+         <div class="slides">
+            <section>
+               <h1>Reconnaissance musicale</h1>
+            </section>
+            <section>
+               <h2>Introduction</h2>
+            </section>
+            <section>
+               <h3>Similarités ?</h3>
+               <table>
+                  <tr class="fragment">
+                     <th>Eschenbach</th>
+                     <td>
+            <audio src="audio/samples/Eschenbach.wav" controls></audio>
+          </td>
+                  </tr>
+                  <tr class="fragment">
+                     <th>Furtwangler</th>
+                     <td>
+            <audio src="audio/samples/Furtwangler.wav" controls></audio>
+          </td>
+                  </tr>
+                  <tr class="fragment">
+                     <th>Karajan</th>
+                     <td>
+            <audio src="audio/samples/Karajan.wav" controls></audio>
+          </td>
+                  </tr>
+                  <tr class="fragment">
+                     <th>Listz</th>
+                     <td>
+            <audio src="audio/samples/Listz.wav" controls></audio>
+          </td>
+                  </tr>
+                  <tr class="fragment">
+                     <th>Stupeflip</th>
+                     <td>
+            <audio src="audio/samples/Stupeflip.wav" controls></audio>
+          </td>
+                  </tr>
+               </table>
+            </section>
+            <section>
+               <h3>Propriétés souhaitées</h3>
+               <ul>
+                  <li>Spécifique / Discriminant</li>
+                  <li>Compact</li>
+                  <li>Robuste</li>
+                  <li>Rapide à comparer</li>
+               </ul>
+            </section>
+            <section>
+               <h3>Transformations</h3>
+               <section>
+                  <h4></h4>
+                  <table>
+                     <tr class="fragment">
+                        <th>Original</th>
+                        <td>
+              <audio src="audio/transforms/Original.wav" controls></audio>
+            </td>
+                     </tr>
+                     <tr class="fragment">
+                        <th>Bruit parole</th>
+                        <td>
+              <audio src="audio/transforms/Bruit parole.wav" controls></audio>
+            </td>
+                     </tr>
+                     <tr class="fragment">
+                        <th>Bruit</th>
+                        <td>
+              <audio src="audio/transforms/Bruit.wav" controls></audio>
+            </td>
+                     </tr>
+                     <tr class="fragment">
+                        <th>Compression</th>
+                        <td>
+              <audio src="audio/transforms/Compression.wav" controls></audio>
+            </td>
+                     </tr>
+                     <tr class="fragment">
+                        <th>Étirement temporel</th>
+                        <td>
+              <audio src="audio/transforms/%C3%89tirement temporel.wav" controls></audio>
+            </td>
+                     </tr>
+                     <tr class="fragment">
+                        <th>Transposition</th>
+                        <td>
+              <audio src="audio/transforms/Transposition.wav" controls></audio>
+            </td>
+                     </tr>
+                  </table>
+               </section>
+               <section>
+                  <h4></h4>
+                  <figure> <img src="figures/transformations.png" style="width:70%;">
+          <figcaption>Sonagrammes avec différentes transformations</figcaption>
+                  </figure>
+               </section>
+            </section>
+            <section>
+               <h3>Fonctionnement général</h3>
+               <section>
+                  <h4></h4>
+                  <figure><img src="figures/diagram.svg" alt=""></figure>
+               </section>
+               <section>
+                  <h4></h4>
+        <iframe src="figures/Wang03-shazam.pdf" scrolling="yes" width="60%" style="aspect-ratio: 42/29.7"></iframe>
+      </section>
+            </section>
+            <section>
+               <h2>Algorithme</h2>
+            </section>
+            <section>
+               <h3>Version 1</h3>
+               <section>
+                  <h4>Empreintes</h4>
+        <script src="max-filter/max-filter.js"></script>
+        <max-filter></max-filter>
+                  <p>
+          $$
+          (m_0, k_0) \quad / \quad
+          \begin{cases}
+          \forall m \in [m_0 - \frac{\eta_t}{2}, m_0 + \frac{\eta_t}{2}] \\
+          \forall k \in [k_0 - \frac{\eta_f}{2}, k_0 + \frac{\eta_f}{2}]
+          \end{cases}
+          \quad
+          S_{dB}(m_0, k_0) \ge \max \left\{ S_{dB}(m,k), \epsilon \right\}
+          $$
+        </p>
+               </section>
+               <section>
+                  <h4>Empreintes</h4>
+                  <figure> <img src="figures/pics_spectraux.png" style="width:70%;">
+          <figcaption>Pic spectraux</figcaption>
+                  </figure>
+               </section>
+               <section>
+                  <h4>Stockage des empreintes</h4>
+                  <table>
+                     <tr>
+                        <th>morceau n°</th>
+                        <th>$m$</th>
+                        <th>$k$</th>
+                     </tr>
+                     <tr>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>45</td>
+                     </tr>
+                     <tr>
+                        <td>$\vdots$</td>
+                        <td>$\vdots$</td>
+                        <td>$\vdots$</td>
+                     </tr>
+                     <tr>
+                        <td>132</td>
+                        <td>51</td>
+                        <td>245</td>
+                     </tr>
+                  </table>
+               </section>
+               <section>
+                  <h4>Comparaison</h4>
+        <script src="slide-compare/slide-compare.js"></script>
+        <slide-compare></slide-compare>
+               </section>
+               <section>
+                  <h4>Complexité</h4>
+                  <pre class="language-matlab"><code>for id = 1:n_chansons
+    entrees = bdd(id)
+    for decalage = 1:n_decalages
+        for [M, K] in entrees
+            for [m, k] in requete
+                if (m + decalage == M) and (k == K)
+                    resultats[id][decalage]++
+                end
+            end
+        end
+    end
+end</code></pre>
+                  <p>$$ C = n_\text{chansons} \times n_\text{décalages} \times n_\text{pics par chanson} \times n_\text{pics par extrait} $$</p>
+               </section>
+            </section>
+            <section>
+               <h3>Version 1.1</h3>
+               <section>
+                  <h4>Complexité</h4>
+                  <pre class="language-matlab"><code>for id = 1:n_chansons
+    entrees = bdd(id)
+    for [M, K] in entrees
+        for [m, k] in requete
+            if (K == k)
+                resultats[id][M - m]++
+            end
+        end
+    end
+end</code></pre>
+                  <p>$$ C = n_\text{chansons} \times n_\text{pics par chanson} \times n_\text{pics par extrait} $$</p>
+               </section>
+            </section>
+            <section>
+               <h3>Version 2</h3>
+               <section>
+                  <h4>Empreintes</h4>
+                  <p>Toujours des pics spectraux, mais l'on va faire en sorte de pouvoir coder $k$ sur $8$ bits.</p>
+                  <p class="fragment">→ Prendre une fenêtre de taille $512$</p>
+               </section>
+               <section>
+                  <h4>Stockage des empreintes</h4>
+                  <table>
+                     <tr>
+                        <th>$k$</th>
+                        <th>$m$</th>
+                        <th>morceau n°</th>
+                     </tr>
+                     <tr>
+                        <td>45</td>
+                        <td>2</td>
+                        <td>1</td>
+                     </tr>
+                     <tr>
+                        <td>$\vdots$</td>
+                        <td>$\vdots$</td>
+                        <td>$\vdots$</td>
+                     </tr>
+                     <tr>
+                        <td>245</td>
+                        <td>51</td>
+                        <td>132</td>
+                     </tr>
+                  </table>
+               </section>
+               <section>
+                  <h4>Complexité</h4>
+                  <pre class="language-matlab"><code>for (m, k) = requete
+    entrees = bdd(k)
+    for [~, M, id] in entrees
+        resultats[id][M - m]++
+    end
+end</code></pre>
+                  <p>$$ C = n_\text{pics par extrait} \times \frac{n_\text{chansons} \times n_\text{pics par chanson}}{2^8} $$</p>
+               </section>
+            </section>
+            <section>
+               <h3>Version 3</h3>
+               <section>
+                  <h4>Empreintes</h4>
+        <script src="slide-pair/slide-pair.js"></script>
+        <slide-pair></slide-pair>
+                  <p>On associe un pic $(m_0, k_0)$ au pic $(m ,k)$ si :</p>
+                  <ul>
+                     <li>$0 \lt m - m_0 \le \delta_t$</li>
+                     <li>$|k - k_0| \le \delta_f$</li>
+                  </ul>
+                  <p>On ne garde que $n_v$ paires, constitués des pics les plus proches</p>
+               </section>
+               <section>
+                  <h4>Stockage des empreintes</h4>
+                  <table>
+                     <tr>
+                        <th>$(k_i, k_j, m_j - m_i)$</th>
+                        <th>$m_i$</th>
+                        <th>morceau n°</th>
+                     </tr>
+                     <tr>
+                        <td>$(45,23,52)$</td>
+                        <td>2</td>
+                        <td>1</td>
+                     </tr>
+                     <tr>
+                        <td>$\vdots$</td>
+                        <td>$\vdots$</td>
+                        <td>$\vdots$</td>
+                     </tr>
+                     <tr>
+                        <td>$(245, 249, 78)$</td>
+                        <td>51</td>
+                        <td>132</td>
+                     </tr>
+                  </table>
+               </section>
+               <section>
+                  <h4>Complexité</h4>
+                  <pre class="language-matlab"><code>for (m_i, k_i, m_j, k_j) = paires_requete
+    entrees = bdd(k_i, k_j, m_j - m_i)
+    for [~, M_i, id] in entrees
+        resultats[id][M_i - m_i]++
+    end
+end</code></pre>
+                  <p>$$ C = n_\text{pics par extrait} \times n_v \times \frac{ n_\text{chansons} \times n_\text{pics par chanson} \times n_v }{2^{32}}$$</p>
+               </section>
+            </section>
+         </div>
+      </div><script>
 				Reveal.initialize({
 					hash: true,
+                    width: "100%",
+                    height: "100%",
+                    
+                    
+                    
 				})
-			</script><script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script><script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script><script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/normalize-whitespace/prism-normalize-whitespace.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css">
-<script>
-				Prism.plugins.NormalizeWhitespace.setDefaults({
-					'remove-trailing': true,
-					'remove-indent': true,
-					'left-trim': true,
-					'right-trim': true,
-				});
-			</script>
-</body>
+			</script></body>
 </html>

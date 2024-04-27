@@ -1,0 +1,13 @@
+section(title="Transformations")
+
+    section 
+        table
+            each val in ["Original", "Bruit parole", "Bruit", "Compression", "Étirement temporel", "Transposition"]
+                tr.fragment
+                    th= val
+                    td: audio(src=`audio/transforms/${val}.wav` controls)
+
+    section
+        figure 
+            img(src="figures/transformations.png" style="width:70%;")
+            figcaption Sonagrammes avec différentes transformations

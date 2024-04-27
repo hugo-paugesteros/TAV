@@ -1,0 +1,268 @@
+
+<section title="Reconnaissance musicale">
+  <section title="Introduction">
+    <section title="Similarités ?">
+      <table>
+        <tr class="fragment">
+          <th>Eschenbach</th>
+          <td>
+            <audio src="audio/samples/Eschenbach.wav" controls="controls"></audio>
+          </td>
+        </tr>
+        <tr class="fragment">
+          <th>Furtwangler</th>
+          <td>
+            <audio src="audio/samples/Furtwangler.wav" controls="controls"></audio>
+          </td>
+        </tr>
+        <tr class="fragment">
+          <th>Karajan</th>
+          <td>
+            <audio src="audio/samples/Karajan.wav" controls="controls"></audio>
+          </td>
+        </tr>
+        <tr class="fragment">
+          <th>Listz</th>
+          <td>
+            <audio src="audio/samples/Listz.wav" controls="controls"></audio>
+          </td>
+        </tr>
+        <tr class="fragment">
+          <th>Stupeflip</th>
+          <td>
+            <audio src="audio/samples/Stupeflip.wav" controls="controls"></audio>
+          </td>
+        </tr>
+      </table>
+    </section>
+    <section title="Propriétés souhaitées">
+      <ul>
+        <li>Spécifique / Discriminant</li>
+        <li>Compact</li>
+        <li>Robuste</li>
+        <li>Rapide à comparer</li>
+      </ul>
+    </section>
+    <section title="Transformations">
+      <section> 
+        <table>
+          <tr class="fragment">
+            <th>Original</th>
+            <td>
+              <audio src="audio/transforms/Original.wav" controls="controls"></audio>
+            </td>
+          </tr>
+          <tr class="fragment">
+            <th>Bruit parole</th>
+            <td>
+              <audio src="audio/transforms/Bruit parole.wav" controls="controls"></audio>
+            </td>
+          </tr>
+          <tr class="fragment">
+            <th>Bruit</th>
+            <td>
+              <audio src="audio/transforms/Bruit.wav" controls="controls"></audio>
+            </td>
+          </tr>
+          <tr class="fragment">
+            <th>Compression</th>
+            <td>
+              <audio src="audio/transforms/Compression.wav" controls="controls"></audio>
+            </td>
+          </tr>
+          <tr class="fragment">
+            <th>Étirement temporel</th>
+            <td>
+              <audio src="audio/transforms/Étirement temporel.wav" controls="controls"></audio>
+            </td>
+          </tr>
+          <tr class="fragment">
+            <th>Transposition</th>
+            <td>
+              <audio src="audio/transforms/Transposition.wav" controls="controls"></audio>
+            </td>
+          </tr>
+        </table>
+      </section>
+      <section>
+        <figure> <img src="figures/transformations.png" style="width:70%;"/>
+          <figcaption>Sonagrammes avec différentes transformations</figcaption>
+        </figure>
+      </section>
+    </section>
+    <section title="Fonctionnement général">
+      <section>
+        <figure><img src="figures/diagram.svg" alt=""/></figure>
+      </section>
+      <section>
+        <iframe src="figures/Wang03-shazam.pdf" scrolling="yes" width="60%" style="aspect-ratio: 42/29.7"></iframe>
+      </section>
+    </section>
+  </section>
+  <section title="Algorithme">
+    <section title="Version 1">
+      <section title="Empreintes">
+        <script src="max-filter/max-filter.js"></script>
+        <max-filter></max-filter>
+        <p>
+          $$
+          (m_0, k_0) \quad / \quad
+          \begin{cases}
+          \forall m \in [m_0 - \frac{\eta_t}{2}, m_0 + \frac{\eta_t}{2}] \\
+          \forall k \in [k_0 - \frac{\eta_f}{2}, k_0 + \frac{\eta_f}{2}]
+          \end{cases}
+          \quad
+          S_{dB}(m_0, k_0) \ge \max \left\{ S_{dB}(m,k), \epsilon \right\}
+          $$
+        </p>
+      </section>
+      <section title="Empreintes">
+        <figure> <img src="figures/pics_spectraux.png" style="width:70%;"/>
+          <figcaption>Pic spectraux</figcaption>
+        </figure>
+      </section>
+      <section title="Stockage des empreintes">
+        <table>
+          <tr>
+            <th>morceau n°</th>
+            <th>$m$</th>
+            <th>$k$</th>
+          </tr>
+          <tr> 
+            <td>1</td>
+            <td>2</td>
+            <td>45</td>
+          </tr>
+          <tr> 
+            <td>$\vdots$</td>
+            <td>$\vdots$</td>
+            <td>$\vdots$</td>
+          </tr>
+          <tr> 
+            <td>132</td>
+            <td>51</td>
+            <td>245</td>
+          </tr>
+        </table>
+      </section>
+      <section title="Comparaison">
+        <script src="slide-compare/slide-compare.js"></script>
+        <slide-compare></slide-compare>
+      </section>
+      <section title="Complexité">
+        <pre class="language-matlab"><code>for id = 1:n_chansons
+    entrees = bdd(id)
+    for decalage = 1:n_decalages
+        for [M, K] in entrees
+            for [m, k] in requete
+                if (m + decalage == M) and (k == K)
+                    resultats[id][decalage]++
+                end
+            end
+        end
+    end
+end</code></pre>
+        <p>$$ C = n_\text{chansons} \times n_\text{décalages} \times n_\text{pics par chanson} \times n_\text{pics par extrait} $$</p>
+      </section>
+    </section>
+    <section title="Version 1.1">
+      <section title="Complexité">
+        <pre class="language-matlab"><code>for id = 1:n_chansons
+    entrees = bdd(id)
+    for [M, K] in entrees
+        for [m, k] in requete
+            if (K == k)
+                resultats[id][M - m]++
+            end
+        end
+    end
+end</code></pre>
+        <p>$$ C = n_\text{chansons} \times n_\text{pics par chanson} \times n_\text{pics par extrait} $$</p>
+      </section>
+    </section>
+    <section title="Version 2">
+      <section title="Empreintes">
+        <p>Toujours des pics spectraux, mais l'on va faire en sorte de pouvoir coder $k$ sur $8$ bits.</p>
+        <p class="fragment">→ Prendre une fenêtre de taille $512$</p>
+      </section>
+      <section title="Stockage des empreintes">
+        <table>
+          <tr>
+            <th>$k$</th>
+            <th>$m$</th>
+            <th>morceau n°</th>
+          </tr>
+          <tr> 
+            <td>45</td>
+            <td>2</td>
+            <td>1</td>
+          </tr>
+          <tr> 
+            <td>$\vdots$</td>
+            <td>$\vdots$</td>
+            <td>$\vdots$</td>
+          </tr>
+          <tr> 
+            <td>245</td>
+            <td>51</td>
+            <td>132</td>
+          </tr>
+        </table>
+      </section>
+      <section title="Complexité">
+        <pre class="language-matlab"><code>for (m, k) = requete
+    entrees = bdd(k)
+    for [~, M, id] in entrees
+        resultats[id][M - m]++
+    end
+end</code></pre>
+        <p>$$ C = n_\text{pics par extrait} \times \frac{n_\text{chansons} \times n_\text{pics par chanson}}{2^8} $$</p>
+      </section>
+    </section>
+    <section title="Version 3">
+      <section title="Empreintes">
+        <script src="slide-pair/slide-pair.js"></script>
+        <slide-pair></slide-pair>
+        <p>On associe un pic $(m_0, k_0)$ au pic $(m ,k)$ si :</p>
+        <ul>
+          <li>$0 \lt m - m_0 \le \delta_t$</li>
+          <li>$|k - k_0| \le \delta_f$</li>
+        </ul>
+        <p>On ne garde que $n_v$ paires, constitués des pics les plus proches</p>
+      </section>
+      <section title="Stockage des empreintes">
+        <table>
+          <tr>
+            <th>$(k_i, k_j, m_j - m_i)$</th>
+            <th>$m_i$</th>
+            <th>morceau n°</th>
+          </tr>
+          <tr> 
+            <td>$(45,23,52)$</td>
+            <td>2</td>
+            <td>1</td>
+          </tr>
+          <tr> 
+            <td>$\vdots$</td>
+            <td>$\vdots$</td>
+            <td>$\vdots$</td>
+          </tr>
+          <tr> 
+            <td>$(245, 249, 78)$</td>
+            <td>51</td>
+            <td>132</td>
+          </tr>
+        </table>
+      </section>
+      <section title="Complexité">
+        <pre class="language-matlab"><code>for (m_i, k_i, m_j, k_j) = paires_requete
+    entrees = bdd(k_i, k_j, m_j - m_i)
+    for [~, M_i, id] in entrees
+        resultats[id][M_i - m_i]++
+    end
+end</code></pre>
+        <p>$$ C = n_\text{pics par extrait} \times n_v \times \frac{ n_\text{chansons} \times n_\text{pics par chanson} \times n_v }{2^{32}}$$</p>
+      </section>
+    </section>
+  </section>
+</section>
