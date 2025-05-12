@@ -1,5 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
 
+html {
+    font-size: 20px;
+}
+
+:root {
+    --r-main-font-size: 1rem;
+    --r-heading-font: Atkinson Hyperlegible Next;
+}
+
 svg {
     stroke: black;
     stroke-width: 0.01;
@@ -33,6 +42,7 @@ svg {
 
 .reveal {
     font-family: Lato;
+    font-family: Atkinson Hyperlegible Next;
     font-weight: 300;
     line-height: 1.5;
 

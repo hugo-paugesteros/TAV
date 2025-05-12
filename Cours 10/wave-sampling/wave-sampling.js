@@ -39,6 +39,7 @@ function define(html) {
                 this.path = this.svg.path().attr({'stroke': 'rgba(255,0,0,0.5)'})
                 this.path.plot(path)
             } else {
+                this.path.timeline().finish()
                 this.path.animate().plot(path)
             }
             
@@ -65,6 +66,7 @@ function define(html) {
                             .cy(point.y)
                     )
                 } else {
+                    this.circles[k].timeline().finish()
                     this.circles[k].animate()
                             .cx(point.x)
                             .cy(point.y)

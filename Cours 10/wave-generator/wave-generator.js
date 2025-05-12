@@ -48,6 +48,13 @@ function define(html) {
                         A/7 * Math.sin(2 * Math.PI * 3*f * t)
                     )
                     break
+                case 'complex2':
+                    this.y = this.t.map((t, i) => 
+                        A/2 * Math.sin(2 * Math.PI * f * t) -
+                        A/8 * Math.sin(2 * Math.PI * 2*f * t) -
+                        A/7 * Math.sin(2 * Math.PI * 3*f * t)
+                    )
+                    break
                 default:
                     this.y = this.t.map((t, i) => A * Math.sin(2 * Math.PI * f * t))
                     break
@@ -66,6 +73,7 @@ function define(html) {
                 this.path = this.svg.path()
                 this.path.plot(path)
             } else {
+                this.path.timeline().finish()
                 this.path.animate().plot(path)
             }
         }

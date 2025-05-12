@@ -4,7 +4,7 @@
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Leçon: le son</title><script src="input-range/input-range.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/3.2.0/svg.min.js" integrity="sha512-EmfT33UCuNEdtd9zuhgQClh7gidfPpkp93WO8GEfAP3cLD++UM1AG9jsTUitCI9DH5nF72XaFePME92r767dHA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css"><script defer="True" src="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.js"></script><script defer="True" src="https://cdn.jsdelivr.net/npm/katex/dist/contrib/auto-render.min.js"></script><script>
+      <title>Leçon: le son</title><script src="input-range/input-range.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/3.2.0/svg.min.js" integrity="sha512-EmfT33UCuNEdtd9zuhgQClh7gidfPpkp93WO8GEfAP3cLD++UM1AG9jsTUitCI9DH5nF72XaFePME92r767dHA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><script src="svg.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css"><script defer="True" src="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.js"></script><script defer="True" src="https://cdn.jsdelivr.net/npm/katex/dist/contrib/auto-render.min.js"></script><script>
                 document.addEventListener("DOMContentLoaded", function() {
                     renderMathInElement(document.body, {
                         delimiters: [
@@ -24,40 +24,11 @@
          <div class="slides">
             <section>
                <h1>Leçon: le son</h1>
-               <blockquote>
-                  <p>Vas-y DJ fais péter le son</p>
-                  <footer>Fatal Bazooka</footer>
-               </blockquote>
             </section>
             <section>
                <h2>Représentation temporelle</h2>
                <h3>Onde sonore</h3>
     <svg id="waveform"></svg>
-    <script>
-      SVG.Svg.prototype.viewrange = function(xMin, xMax, yMin, yMax) {
-          this.xMin = xMin
-          this.xMax = xMax
-          this.yMin = yMin
-          this.yMax = yMax
-          return this
-      }
-      
-      SVG.Svg.prototype.scale = function(point) {
-          let xPerc = (point.x - this.xMin) / (this.xMax - this.xMin)
-          let yPerc = (point.y - this.yMin) / (this.yMax - this.yMin)
-          return {x: xPerc * this.viewbox().width, y: this.viewbox().height * (1 - yPerc)}
-      }
-      
-      SVG.Svg.prototype.getPath = function(x, y) {
-          return y.reduce(
-          (acc, curr, k) => {
-              let point = this.scale({x: x[k], y: curr})
-              if(k == 0) return `M ${point.x} ${point.y} `
-              return acc + `L ${point.x} ${point.y} `
-          }, '')
-      }
-      
-    </script>
     <script>
       let sr = 44100
       let svg = SVG('#waveform').viewbox(0, 0, 10, 2).viewrange(0, 0.02, -1.05, 1.05)
@@ -150,6 +121,32 @@
                      <li class="fragment" data-fragment-index="3">Algorithme ?<span class="fragment response" data-fragment-index="6">Mais c'est formidable ! </span></li>
                   </ul>
                </section>
+            </section>
+            <section>
+               <h3>Discrete Fourier Transform</h3>
+               <section>
+                  <h4>Définition</h4>
+                  <p>$$ X(k) \coloneqq \langle x, f_k \rangle = \sum_{n = 0}^{N - 1} x(n) \exp(-2 \pi i n k / N), \qquad k = 0, 1, \dots, N - 1 $$</p>
+                  <p>Quelques propriétés :</p>
+                  <ul>
+                     <li class="fragment">$n \mapsto \exp(-2 \pi i n k / N)$ correspond à une sinusoïde complexe de fréquence $\frac{k \cdot f_{ech}}{N}$</li>
+                     <li class="fragment">La DFT d'un signal de taille $N$ est $N$-périodique</li>
+                     <li class="fragment">Si $x \in \R^N$, alors $X(k) = \bar{X}(N - k)$ pour $k \in 1, \dots, N-1$</li>
+                  </ul>
+               </section>
+               <section>
+                  <h4>Inverse DFT</h4>
+                  <p>$$ x(n) \coloneqq \sum_{k=0}^{N-1} \langle x, f_k \rangle \frac{f_k}{\|f_k\|} = \frac{1}{N} \sum_{k=0}^{N-1} X(k) \exp(2 \pi i k n / N), \qquad n = 0, 1, \dots, N - 1 $$</p>
+               </section>
+               <section>
+                  <h4>FFT</h4>
+                  <p>Algorithme rapide de calcul de la DFT (directe ou inverse) dans le cas d'un signal de taille $2^n$</p>
+               </section>
+            </section>
+            <section>
+               <h3>Enroule</h3>
+      <script src="fourier-warp/fourier-warp.js" type="module"></script>
+      <fourier-warp></fourier-warp>
             </section>
             <section>
                <h3>Quelques observations sur le produit scalaire</h3>
@@ -287,27 +284,6 @@
                <section>
                   <h4>Reconstruction ?</h4>
                   <p>Pour un signal de taille $n$, il suffit de le comparer avec $n$ paires de $\cos$ / $\sin$ pour pouvoir effectuer une reconstruction parfaite !</p>
-               </section>
-            </section>
-            <section>
-               <h3>Discrete Fourier Transform</h3>
-               <section>
-                  <h4>Définition</h4>
-                  <p>$$ X(k) \coloneqq \langle x, f_k \rangle = \sum_{n = 0}^{N - 1} x(n) \exp(-2 \pi i n k / N), \qquad k = 0, 1, \dots, N - 1 $$</p>
-                  <p>Quelques propriétés :</p>
-                  <ul>
-                     <li class="fragment">$n \mapsto \exp(-2 \pi i n k / N)$ correspond à une sinusoïde complexe de fréquence $\frac{k \cdot f_{ech}}{N}$</li>
-                     <li class="fragment">La DFT d'un signal de taille $N$ est $N$-périodique</li>
-                     <li class="fragment">Si $x \in \R^N$, alors $X(k) = \bar{X}(N - k)$ pour $k \in 1, \dots, N-1$</li>
-                  </ul>
-               </section>
-               <section>
-                  <h4>Inverse DFT</h4>
-                  <p>$$ x(n) \coloneqq \sum_{k=0}^{N-1} \langle x, f_k \rangle \frac{f_k}{\|f_k\|} = \frac{1}{N} \sum_{k=0}^{N-1} X(k) \exp(2 \pi i k n / N), \qquad n = 0, 1, \dots, N - 1 $$</p>
-               </section>
-               <section>
-                  <h4>FFT</h4>
-                  <p>Algorithme rapide de calcul de la DFT (directe ou inverse) dans le cas d'un signal de taille $2^n$</p>
                </section>
             </section>
             <section>
@@ -556,16 +532,20 @@ end</code></pre>
                </section>
             </section>
             <section>
-               <h2></h2><img src="generated/qr-code.svg" alt="" srcset=""></section>
+               <h2></h2><img src="generated/qr-code.svg" alt="" srcset="" style="width:50%"></section>
          </div>
       </div><script>
 				Reveal.initialize({
 					hash: true,
-                    width: 1920,
-                    height: 1280,
+                    width: '100%',
+                    height: '100%',
+                    slideNumber: true,
+                    minScale: 1,
+                    maxScale: 1,
                     
                     
                     
+                    autoAnimateDuration: 0.5,
 				})
 			</script></body>
 </html>

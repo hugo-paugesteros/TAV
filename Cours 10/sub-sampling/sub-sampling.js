@@ -52,6 +52,7 @@ function define(html) {
                     this.svg.circle(.05).cx(Math.cos(angle)).cy(-Math.sin(angle))
                 )
                 this.line2.plot(0, 0, Math.cos(angle), -Math.sin(angle))
+                // this.shadow.timeline().finish()
                 this.shadow = this.svg.line(0, 0, Math.cos(angle), -Math.sin(angle)).animate().attr({opacity: '0'})
             } 
             this.animation = requestAnimationFrame((t) => this.draw(t))

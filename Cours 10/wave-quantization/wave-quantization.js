@@ -23,7 +23,10 @@ function define(html) {
 
             this.y = this.t.map(t =>  Math.sin(2 * Math.PI * 440 * t))
             let path = this.getPath(this.t.slice(0, 1000), this.y.slice(0, 1000))
-            this.svg.path().plot(path).attr({'stroke-width': 0.005, 'stroke-dasharray': 0.05})
+            this.svg.path().plot(path).attr({
+                'stroke-width': 0.005, 
+                'stroke-dasharray': 0.05
+            })
 
             this.update()
         }
@@ -46,6 +49,7 @@ function define(html) {
                 this.path = this.svg.path()
                 this.path.plot(path)
             } else {
+                this.path.timeline().finish()
                 this.path.animate().plot(path)
             }
         }

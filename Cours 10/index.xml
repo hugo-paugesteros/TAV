@@ -1,37 +1,8 @@
 
 <section title="Leçon: le son">
-  <blockquote> 
-    <p>Vas-y DJ fais péter le son</p>
-    <footer>Fatal Bazooka</footer>
-  </blockquote>
   <section title="Représentation temporelle">
     <h3>Onde sonore</h3>
     <svg id="waveform"></svg>
-    <script>
-      SVG.Svg.prototype.viewrange = function(xMin, xMax, yMin, yMax) {
-          this.xMin = xMin
-          this.xMax = xMax
-          this.yMin = yMin
-          this.yMax = yMax
-          return this
-      }
-      
-      SVG.Svg.prototype.scale = function(point) {
-          let xPerc = (point.x - this.xMin) / (this.xMax - this.xMin)
-          let yPerc = (point.y - this.yMin) / (this.yMax - this.yMin)
-          return {x: xPerc * this.viewbox().width, y: this.viewbox().height * (1 - yPerc)}
-      }
-      
-      SVG.Svg.prototype.getPath = function(x, y) {
-          return y.reduce(
-          (acc, curr, k) => {
-              let point = this.scale({x: x[k], y: curr})
-              if(k == 0) return `M ${point.x} ${point.y} `
-              return acc + `L ${point.x} ${point.y} `
-          }, '')
-      }
-      
-    </script>
     <script>
       let sr = 44100
       let svg = SVG('#waveform').viewbox(0, 0, 10, 2).viewrange(0, 0.02, -1.05, 1.05)
@@ -106,6 +77,27 @@
           <li class="fragment" data-fragment-index="3">Algorithme ?<span class="fragment response" data-fragment-index="6">Mais c'est formidable ! </span></li>
         </ul>
       </section>
+    </section>
+    <section title="Discrete Fourier Transform">
+      <section title="Définition">
+        <p>$$ X(k) \coloneqq \langle x, f_k \rangle = \sum_{n = 0}^{N - 1} x(n) \exp(-2 \pi i n k / N), \qquad k = 0, 1, \dots, N - 1 $$</p>
+        <p>Quelques propriétés :</p>
+        <ul> 
+          <li class="fragment">$n \mapsto \exp(-2 \pi i n k / N)$ correspond à une sinusoïde complexe de fréquence $\frac{k \cdot f_{ech}}{N}$</li>
+          <li class="fragment">La DFT d'un signal de taille $N$ est $N$-périodique</li>
+          <li class="fragment">Si $x \in \R^N$, alors $X(k) = \bar{X}(N - k)$ pour $k \in 1, \dots, N-1$</li>
+        </ul>
+      </section>
+      <section title="Inverse DFT">
+        <p>$$ x(n) \coloneqq \sum_{k=0}^{N-1} \langle x, f_k \rangle \frac{f_k}{\|f_k\|} = \frac{1}{N} \sum_{k=0}^{N-1} X(k) \exp(2 \pi i k n / N), \qquad n = 0, 1, \dots, N - 1 $$</p>
+      </section>
+      <section title="FFT">
+        <p>Algorithme rapide de calcul de la DFT (directe ou inverse) dans le cas d'un signal de taille $2^n$</p>
+      </section>
+    </section>
+    <section title="Enroule">
+      <script src="fourier-warp/fourier-warp.js" type="module"></script>
+      <fourier-warp></fourier-warp>
     </section>
     <section title="Quelques observations sur le produit scalaire">
       <script src="inner-product/inner-product.js"></script>
@@ -237,23 +229,6 @@
       </section>
       <section title="Reconstruction ?">
         <p>Pour un signal de taille $n$, il suffit de le comparer avec $n$ paires de $\cos$ / $\sin$ pour pouvoir effectuer une reconstruction parfaite !</p>
-      </section>
-    </section>
-    <section title="Discrete Fourier Transform">
-      <section title="Définition">
-        <p>$$ X(k) \coloneqq \langle x, f_k \rangle = \sum_{n = 0}^{N - 1} x(n) \exp(-2 \pi i n k / N), \qquad k = 0, 1, \dots, N - 1 $$</p>
-        <p>Quelques propriétés :</p>
-        <ul> 
-          <li class="fragment">$n \mapsto \exp(-2 \pi i n k / N)$ correspond à une sinusoïde complexe de fréquence $\frac{k \cdot f_{ech}}{N}$</li>
-          <li class="fragment">La DFT d'un signal de taille $N$ est $N$-périodique</li>
-          <li class="fragment">Si $x \in \R^N$, alors $X(k) = \bar{X}(N - k)$ pour $k \in 1, \dots, N-1$</li>
-        </ul>
-      </section>
-      <section title="Inverse DFT">
-        <p>$$ x(n) \coloneqq \sum_{k=0}^{N-1} \langle x, f_k \rangle \frac{f_k}{\|f_k\|} = \frac{1}{N} \sum_{k=0}^{N-1} X(k) \exp(2 \pi i k n / N), \qquad n = 0, 1, \dots, N - 1 $$</p>
-      </section>
-      <section title="FFT">
-        <p>Algorithme rapide de calcul de la DFT (directe ou inverse) dans le cas d'un signal de taille $2^n$</p>
       </section>
     </section>
     <section title="Fuite spectrale">
@@ -479,5 +454,5 @@ end</code></pre>
       </section>
     </section>
   </section>
-  <section><img src="generated/qr-code.svg" alt="" srcset=""/></section>
+  <section><img src="generated/qr-code.svg" alt="" srcset="" style="width:50%"/></section>
 </section>

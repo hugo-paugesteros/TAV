@@ -11,6 +11,7 @@
             <script src="input-range/input-range.js"></script>
 
             <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/3.2.0/svg.min.js" integrity="sha512-EmfT33UCuNEdtd9zuhgQClh7gidfPpkp93WO8GEfAP3cLD++UM1AG9jsTUitCI9DH5nF72XaFePME92r767dHA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            <script src="svg.js"></script>
 
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css"></link>
             <script defer="True" src="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.js"></script>
@@ -41,8 +42,6 @@
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/a11y-dark.css" integrity="sha512-d/XggqGycQ04tWRYDW0iD5E/1WjEpvg+9iUvVKHkq/eUuwtGAB+5Rl3cSuSL1znHXTRMr6g1w22jVu4yNvK2xQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
             <link rel="stylesheet" href="style.css"/>
-
-            <!-- <link rel="stylesheet" href="https://unpkg.com/latex.css/style.min.css" /> -->
         </head>
         <body>
             <div class="reveal">
@@ -54,12 +53,15 @@
             <script>
 				Reveal.initialize({
 					hash: true,
-                    width: 1920,
-                    height: 1280,
-                    <!-- minScale: 1,
-                    maxScale: 1.0 -->
-                    <!-- height: 100vh, -->
-                    <!-- height: 720, -->
+                    width: '100%',
+                    height: '100%',
+                    slideNumber: true,
+                    minScale: 1,
+                    maxScale: 1,
+                    <!-- transition: 'none', -->
+                    <!-- disableLayout: true, -->
+                    <!-- display: 'flex', -->
+                    autoAnimateDuration: 0.5,
 				})
 			</script>
         </body>
