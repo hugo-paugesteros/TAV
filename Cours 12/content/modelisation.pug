@@ -1,0 +1,73 @@
+section(title="Modélisation de sources musicales")
+
+    section(title="Position")
+
+        section(title="ICA")
+            figure
+                include ../img/ica.svg
+
+    section(title="Répétition")
+
+        section(title="Repet")
+
+            figure
+                div(style='position: relative;')
+                    img(src="img/repet.png", alt="", srcset="")
+                    audio#btn(src='audio/repet/mixture.mp3' controls style='top:17%;left:0')
+                    audio#btn(src='audio/repet/bg.mp3' controls style='top:79%;right:-10%')
+                    audio#btn(src='audio/repet/fg.mp3' controls style='top:89%;right:-10%')
+
+    section(title="Timbre")
+
+        section(title="HPSS")
+            figure
+                img(src="img/hpss.png", alt="", srcset="")
+
+        section(title="HPSS")
+            figure(style='max-width: 850px')
+                div(style='position: relative;')
+                    img(src="img/hpss_alg.png", alt="", srcset="")
+                    audio#btn(src='audio/old/Separation de sources/HPSS_melange.wav' controls style='top:75%;left:15%')
+                    audio#btn(src='audio/old/Separation de sources/HPSS_harmonique_soft.wav' controls style='top:25%;right:-15%')
+                    audio#btn(src='audio/old/Separation de sources/HPSS_percussive_soft.wav' controls style='top:75%;right:-15%')
+
+        section(title="NMF")
+            figure
+                img(src="img/nmf_ex.png", alt="", srcset="")
+        
+        section(title="NMF")
+            figure
+                img(src="img/nmf_decomp.png", alt="", srcset="")
+
+        section(title="NMF")
+            figure
+                img(src="img/nmf_alg.png", alt="", srcset="")
+
+        section(title="NMF")
+            p On cherche $\mathbf{D}$, $\mathbf{A}$ telles que :
+            eq $$ \mathbf{D} \mathbf{A} \approx \mathbf{S} $$
+            p C’est un problème d’optimisation sous contraintes
+            eq $$\{ \mathbf{\hat{D}}, \mathbf{\hat{A}} \} = \arg \min_{\mathbf{D},\mathbf{A}} \mathcal{E}\left(\mathbf{S }\,-\mathbf{DA}\right) \quad \text{s.c.} \quad \mathbf{D }\in \mathcal{M}_{K, R}(\mathbb{R}_{+}), \mathbf{A }\in \mathcal{M}_{R, N}(\mathbb{R}_{+})$$
+
+        section(title="NMF")
+            p Souvent, $\mathcal{E}$ est une simple norme euclidienne
+            eq $$\mathcal{E} \left( \mathbf{S} - \mathbf{D} \mathbf{A} \right) = \frac{1}{2} \, \| \mathbf{S} - \mathbf{D} \mathbf{A} \|_{F}^{2} = \frac{1}{2}\sum_{i} \sum_{j} \, [\mathbf{S} - \mathbf{D} \mathbf{A}]_{i,j}^{2}$$
+            p Malheureusement, le problème devient non convexe…
+
+        section(title="NMF")
+            p Solution : descente de gradient alternée
+            eq $$\begin{aligned} {\mathbf{D}} &amp; \vartriangleleft {\mathbf{D} - \mathbf{\eta_{D}} \odot \nabla_{\mathbf{D}} \mathcal{E}(\mathbf{S}\,-\mathbf{DA})} \\ {\mathbf{A}} &amp; \vartriangleleft {\mathbf{A}- \mathbf{\eta_{A}} \odot \nabla_{\mathbf{A}} \mathcal{E}(\mathbf{S}-\mathbf{DA})} \end{aligned}$$
+
+        section(title="NMF")
+            p En choisissant bien les pas, on peut assurer la non-négativité de D et A. Les règles de mises à jour sont alors :
+            eq. 
+                $$\begin{aligned} 
+                \mathbf{D} &amp; \vartriangleleft \mathbf{D} \odot \left( \mathbf{S} \mathbf{A}^{\top} \right) \oslash \left(\mathbf{D} \mathbf{A} \mathbf{A}^{\top} \right) \\ 
+                \mathbf{A} &amp; \vartriangleleft \mathbf{A} \odot \left( \mathbf{D}^{\top} \mathbf{S} \right) \oslash \left(\mathbf{D}^{\top} \mathbf{D} \mathbf{A} \right) \\ 
+                
+                \end{aligned}$$
+
+        section(title="NMF")
+            figure
+                include ../img/nmf.svg
+

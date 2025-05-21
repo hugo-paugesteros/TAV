@@ -1,0 +1,79 @@
+<svg viewBox="0 0 900 180" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto" fill="black">
+      <polygon points="0 0, 10 3.5, 0 7" />
+    </marker>
+  </defs>
+
+  <style>
+    .block {
+      fill: #f0f0f0; /* Light gray */
+      stroke: #666666; /* Darker gray border */
+      stroke-width: 1.5;
+    }
+    .block-text {
+      font-size: 16px;
+      text-anchor: middle;
+      fill: #333333;
+    }
+    .label-text {
+      font-size: 22px;
+      text-anchor: middle;
+      fill: white;
+    }
+    .arrow-line {
+      stroke: #333333;
+      stroke-width: 1.5;
+      marker-end: url(#arrowhead);
+    }
+  </style>
+
+  <!-- Input y -->
+  <foreignObject x="30" y="75" width="1" height="1">
+  $y$
+  </foreignObject>
+  <!-- <text x="30" y="95" class="label-text" font-style="italic">$y$</text> -->
+  <line x1="60" y1="90" x2="100" y2="90" class="arrow-line" />
+
+  <!-- Block 1: TFCT -->
+  <rect x="100" y="50" width="140" height="80" rx="5" ry="5" class="block"/>
+  <text x="170" y="95" class="block-text">TFCT</text>
+
+  <!-- Arrow 1 and Label Y -->
+  <line x1="240" y1="90" x2="280" y2="90" class="arrow-line" />
+  <foreignObject x="255" y="10" width="1" height="1">
+  $Y$
+  </foreignObject>
+
+  <!-- Block 2: Modélisation de source -->
+  <rect x="280" y="50" width="180" height="80" rx="5" ry="5" class="block"/>
+  <text x="370" y="85" class="block-text">Modélisation</text>
+  <text x="370" y="105" class="block-text">de source</text>
+
+  <!-- Arrow 2 and Label F_j -->
+  <line x1="460" y1="90" x2="500" y2="90" class="arrow-line" />
+  <foreignObject x="470" y="10" width="1" height="1">
+  $F_j$
+  </foreignObject>
+
+  <!-- Block 3: Masquage -->
+  <rect x="500" y="50" width="140" height="80" rx="5" ry="5" class="block"/>
+  <text x="570" y="95" class="block-text">Masquage</text>
+
+  <!-- Arrow 3 and Label Y_hat_j -->
+  <line x1="640" y1="90" x2="680" y2="90" class="arrow-line" />
+  <foreignObject x="650" y="10" width="1" height="1">
+  $\hat{Y}_j$
+  </foreignObject>
+
+  <!-- Block 4: ITFCT -->
+  <rect x="680" y="50" width="140" height="80" rx="5" ry="5" class="block"/>
+  <text x="750" y="95" class="block-text">ITFCT</text>
+
+  <!-- Output y_hat_j -->
+  <line x1="820" y1="90" x2="860" y2="90" class="arrow-line" />
+
+  <foreignObject x="880" y="75" width="1" height="1">
+  $\hat{y}_j$
+  </foreignObject>
+</svg>

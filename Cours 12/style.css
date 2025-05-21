@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+html {
+    font-size: 20px;
+}
+
+:root {
+    --r-main-font-size: 1rem;
+    --r-heading-font: Atkinson Hyperlegible Next;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: black;
+        color: white;
+    }
+
+}
+
+.reveal {
+    font-family: Lato;
+    font-family: Atkinson Hyperlegible Next;
+    font-weight: 300;
+    line-height: 1.5;
+
+    h1, h2, h3, h4, p {
+        text-transform: none;
+    }
+
+    li {
+        line-height: 2;
+    }
+
+    pre {
+        font-size: 1em;
+        code {
+            max-height: none;
+        }
+    }
+
+}
+
+.response {
+    color : green;
+    margin: 0 1em;
+}
+
+.reveal blockquote {
+    padding: 1em;
+    font-style: normal;
+
+    p {
+        margin: 0;
+        &::before {
+            content: "“";
+        }
+        &::after{
+            content: "”";
+        }
+    }
+
+    footer {
+        &::before {
+            content: '- ';
+        }
+        text-align: right;
+    }
+}
+
+.reveal figure {
+    max-width: 700px;
+    margin: 0 auto;
+    img {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
+figure svg {
+    display: block;
+    width: 100%;
+}
+
+audio#btn {
+    width: 50px;
+    position: absolute;
+    transform: translateX(-50%) translateY(-50%);
+}
+
+svg foreignObject {
+    overflow: visible;
+    /* transform: translateX(-50%) translateY(-50%); */
+}

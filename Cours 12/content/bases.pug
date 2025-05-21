@@ -1,0 +1,78 @@
+section(title="Bases de la séparation de source")
+
+    section(title="Schéma classique")
+
+        figure
+            include ../img/schema.svg
+
+    section(title="Représentations d'un signal sonore")
+
+        section(title="Forme d'onde")
+
+            figure
+                img(src="img/richter.gif", alt="", srcset="", style="filter: invert(0.9)")
+
+                figcaption #[i Open Source Tools and Data for Music Source Separation], Ethan Manilow and Prem Seetharman and Justin Salamon
+
+        section(title="Spectrogramme")
+
+            figure
+                img(src="img/spectrogram.png", alt="", srcset="", style="filter: invert(0.9)")
+
+                figcaption 
+    
+    section(title="Masquage")
+
+        section(title="Idée")
+
+            eq.
+                $$
+                \begin{aligned}
+                    y &amp; = x_{1} + x_{2} \\
+                    Y &amp; = X_{1} + X_{2} \\
+                    \left|Y\right| &amp; = \left|X_{1} + X_{2}\right| \\
+                    &amp; \neq \left|X_{1}\right| \,+\, \left|X_{2}\right|
+                \end{aligned}
+                $$
+
+            audio(src="audio/old/Separation de sources/HPSS_melange.wav" controls) 
+        
+        section(title="Masquage binaire")
+            eq.
+                $$
+                \begin{aligned}
+                    M_1 &amp; = (F_1 &gt; F_2) \\
+                    M_2 &amp; = (F_2 &gt; F_1) \\
+                \end{aligned}
+                $$
+            p puis 
+            eq.
+                $$
+                \begin{aligned}
+                    \hat{X}_1 = M_1 \odot Y \\
+                    \hat{X}_2 = M_2 \odot Y \\
+                \end{aligned}
+                $$
+
+            audio(src="audio/old/Separation de sources/HPSS_harmonique_binary.wav" controls) 
+            audio(src="audio/old/Separation de sources/HPSS_percussive_binary.wav" controls) 
+
+        section(title="Masquage doux")
+            eq.
+                $$
+                \begin{aligned}
+                    M_1 &amp; = F_1 \oslash (F_1 + F_2) \\
+                    M_2 &amp; = F_2 \oslash (F_1 + F_2) \\
+                \end{aligned}
+                $$
+            p puis 
+            eq.
+                $$
+                \begin{aligned}
+                    \hat{X}_1 = M_1 \odot Y \\
+                    \hat{X}_2 = M_2 \odot Y \\
+                \end{aligned}
+                $$
+            
+            audio(src="audio/old/Separation de sources/HPSS_harmonique_soft.wav" controls) 
+            audio(src="audio/old/Separation de sources/HPSS_percussive_soft.wav" controls) 

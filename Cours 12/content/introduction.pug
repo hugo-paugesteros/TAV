@@ -1,0 +1,65 @@
+section(title="Introduction")
+
+    section(title="Séparation de sources")
+
+        p #[b But :] isoler N sources à partir de M enregistrements
+        figure 
+            include ../img/separation.svg
+
+    section(title="Formulation")
+
+        p #[b But :] isoler N sources à partir de M enregistrements
+
+        div(style='display: flex; justify-content: space-evenly; align-items: baseline;')
+
+            eq $$y_{i}(t) = \sum_{j=1}^{N} a_{ij}s_{j}(t)$$
+
+            eq. 
+                $$
+                \begin{pmatrix}
+                    y_{1} \\ \vdots  \\ y_{m}
+                \end{pmatrix}
+                =
+                \begin{pmatrix}
+                    a_{11} &amp; \dots  &amp; a_{1n} \\
+                    \vdots &amp; \vdots &amp; \vdots \\
+                    a_{m1} &amp; \dots  &amp; a_{mn}
+                \end{pmatrix}
+                \begin{pmatrix}
+                    s_{1} \\ \vdots  \\ s_{n}
+                \end{pmatrix}
+                $$
+
+    section(title="Séparation de sources musicales")
+
+        figure
+            div(style='position: relative;')
+                img(src="img/source_separation_io.png", alt="", srcset="")
+                audio#btn(src='audio/mixture.wav' controls style='top:59%;left:0')
+                audio#btn(src='audio/bass.wav' controls style='top:20%;right:-10%')
+                audio#btn(src='audio/drums.wav' controls style='top:45%;right:-10%')
+                audio#btn(src='audio/others.wav' controls style='top:70%;right:-10%')
+                audio#btn(src='audio/vocals.wav' controls style='top:90%;right:-10%')
+
+            figcaption #[i Open Source Tools and Data for Music Source Separation], Ethan Manilow and Prem Seetharman and Justin Salamon
+
+    section(title="Applications")
+
+        ul
+            li Directes :
+                ul
+                    li Re-mixage
+                    li Débruitage 
+            li Indirectes :
+                ul 
+                    li Transcription
+                    li Changement de tempo, de hauteur
+                    li Analyse des paroles
+                    li ...
+
+    section(title="Difficultés")
+
+        ul
+            li Sources très corrélées et mêlées
+            li Souvent, effets non linéaires lors du mixage
+            li Très difficile de faire une séparation de qualité acceptable

@@ -1,0 +1,58 @@
+<svg viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+        <style>
+            audio {
+                width: 50px;
+            }
+
+            text.text-label {
+                fill: white;
+            }
+        </style>
+
+        <!-- The light blue polygon background -->
+        <polygon points="220,30 680,50 650,310 200,300 180,180" fill="#e0e8f0" stroke="#777" stroke-width="1.5"/>
+
+        <!-- Lines -->
+        <line x1="70" y1="150" x2="250" y2="200" stroke="#888" stroke-width="1.5"/>
+        <line x1="70" y1="250" x2="250" y2="200" stroke="#888" stroke-width="1.5"/>
+
+        <line x1="280" y1="200" x2="500" y2="120" stroke="#888" stroke-width="1.5"/>
+        <line x1="280" y1="200" x2="500" y2="280" stroke="#888" stroke-width="1.5"/>
+
+
+        <!-- Speaker Instances - these are clickable -->
+        <!-- Make sure to create actual audio files for these -->
+        <foreignObject x="70" y="150" width="40" height="40" class="rs">
+            <audio src="audio/tuches.wav" controls="True"></audio>
+        </foreignObject>
+
+        <foreignObject x="70" y="250" width="40" height="40" class="rs">
+            <audio src="audio/asterix.mp3" controls="True"></audio>
+        </foreignObject>
+
+        <foreignObject x="265" y="200" width="40" height="40" class="rs">
+            <audio src="audio/mix.wav" controls="True"></audio>
+        </foreignObject>
+
+        <foreignObject x="500" y="120" width="40" height="40" class="rs">
+            <audio src="audio/tuches.wav" controls="True"></audio>
+        </foreignObject>
+
+        <foreignObject x="500" y="280" width="40" height="40" class="rs">
+            <audio src="audio/asterix.mp3" controls="True"></audio>
+        </foreignObject>
+
+        <!-- Text Labels -->
+        <text x="60" y="350" class="text-label" font-style="italic">Sources</text>
+        <text x="230" y="350" class="text-label" font-style="italic">Enregistrement(s)</text>
+        <text x="480" y="350" class="text-label" font-style="italic">Sources estimées ?</text>
+
+        <!-- Question Marks -->
+        <text x="400" y="140" class="question-mark">?</text>
+        <text x="400" y="270" class="question-mark">?</text>
+
+        <!-- Hidden audio player - alternatively create Audio objects in JS -->
+        <audio id="audioPlayerHidden" style="display:none;"></audio>
+
+    </svg>
